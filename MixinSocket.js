@@ -17,7 +17,7 @@ class MixinSocket extends MixinBase {
             Authorization: `Bearer ${this.getJwtToken(this.CLIENT_CONFIG, 'GET', '/', '')}`
         }
 
-        this.socket = new WebSocket(this.url, this.protocols, {headers})
+        this.socket = new WebSocket(this.url, this.protocols, { headers })
         this.socket.onmessage = this._on_message.bind(this)
         this.socket.onopen = this._on_open.bind(this)
         this.socket.onerror = this._on_error.bind(this)
@@ -54,7 +54,7 @@ class MixinSocket extends MixinBase {
 
     _on_open() {
         console.log('ws connected...')
-        this.send_raw({id: this.getUUID(), action: 'LIST_PENDING_MESSAGES'})
+        this.send_raw({ id: this.getUUID(), action: 'LIST_PENDING_MESSAGES' })
     }
 
 
@@ -63,7 +63,9 @@ class MixinSocket extends MixinBase {
     }
 
     _on_close(e) {
-        console.log('ws closed...')
+        setTimeout(() => {
+            this.start()
+        }, 5000)
     }
 
 
