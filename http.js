@@ -23,7 +23,6 @@ function _create_instance(CLIENT_CONFIG) {
             console.error(data.error)
             return;
         }
-        console.dir(data.data)
         return data.data
     })
     return instance
