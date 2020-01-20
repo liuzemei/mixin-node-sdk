@@ -5,7 +5,8 @@ const MixinNetwork = function () {
 MixinNetwork.prototype = {
     async pin_update({ old_pin, pin }) {
         const params = {
-            old_pin: this.signPin(old_pin),
+            // reference: https://developers.mixin.one/api/alpha-mixin-network/create-pin/
+            old_pin: old_pin ? this.signPin(old_pin) : '',
             pin: this.signPin(pin)
         }
         return await this._request.post('/pin/update', params)
