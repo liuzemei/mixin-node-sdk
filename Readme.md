@@ -394,7 +394,7 @@ socket_client.get_message_handler = function (message) {
         height: 377,
     }, message)
 
-    // 回复贴纸消息
+    // Reply to sticker message
     this.send_sticker({
         name: "eye",
         album_id: "efb5b085-15c5-4072-8f19-1703f63ed14e",
