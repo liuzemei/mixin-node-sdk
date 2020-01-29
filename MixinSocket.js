@@ -43,12 +43,12 @@ class MixinSocket extends MixinBase {
         });
     }
 
-    get_message_handler(message) {
+    async get_message_handler(message) {
     }
 
     _on_message(message) {
-        this.decode(message.data).then(decoded => {
-            this.get_message_handler(decoded)
+        this.decode(message.data).then(async decoded => {
+            await this.get_message_handler(decoded)
         })
     }
 
