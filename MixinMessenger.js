@@ -96,7 +96,7 @@ MixinMessenger.prototype = {
     },
 
     async send_message({ recipient_id, data, category, _conversation_id }) {
-        !Array.isArray(data) && (data = [data])
+        category === 'APP_BUTTON_GROUP' && !Array.isArray(data) && (data = [data])
         if (_conversation_id) conversation_id = _conversation_id
         else {
             let res = await this._create_conversation(recipient_id)
