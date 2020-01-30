@@ -95,9 +95,13 @@ MixinMessenger.prototype = {
         }
     },
 
-    async send_message({ recipient_id, data, category }) {
+    async send_message({ recipient_id, data, category, _conversation_id }) {
         !Array.isArray(data) && (data = [data])
-        let { conversation_id } = await this._create_conversation(recipient_id)
+        if (_conversation_id) conversation_id = _conversation_id
+        else {
+            let res = await this._create_conversation(recipient_id)
+            conversation_id = res.conversation_id
+        }
         const params = {
             conversation_id, category,
             message_id: this.getUUID(),
