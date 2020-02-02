@@ -38,14 +38,12 @@ MixinMessenger.prototype = {
                 'x-amz-acl': 'public-read',
                 'Content-Type': 'application/octet-stream'
             },
+            maxContentLength: 2147483648,
             data: file
         })
         console.log('Upload Success: ')
-        console.log({
-            attachment_id,
-            view_url
-        })
-        return
+        console.log({ attachment_id, view_url })
+        return { attachment_id, view_url }
     },
     async get_attachment() {
         return await this._request.post('/attachments')
