@@ -9,7 +9,7 @@ function _create_instance(CLIENT_CONFIG) {
         }
     })
     instance.interceptors.request.use(config => {
-        const {method, url, data} = config
+        const { method, url, data } = config
         const jwtToken = Mixin.prototype.getJwtToken(CLIENT_CONFIG, method, url, data || '')
         config.headers = {
             Authorization: 'Bearer ' + jwtToken,
@@ -18,12 +18,8 @@ function _create_instance(CLIENT_CONFIG) {
     })
 
     instance.interceptors.response.use(res => {
-        let data = res.data
-        if (data.error && data.error.description) {
-            console.error(data.error)
-            return;
-        }
-        return data.data
+        let { data } = res
+        return data.data || data.error
     })
     return instance
 }

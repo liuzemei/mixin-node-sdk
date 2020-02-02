@@ -41,8 +41,6 @@ MixinMessenger.prototype = {
             maxContentLength: 2147483648,
             data: file
         })
-        console.log('Upload Success: ')
-        console.log({ attachment_id, view_url })
         return { attachment_id, view_url }
     },
     async get_attachment() {
