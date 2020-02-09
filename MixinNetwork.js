@@ -69,9 +69,9 @@ MixinNetwork.prototype = {
     async query_network_asset({ asset_id }) {
         return await this._request.get('/network/assets/' + asset_id)
     },
-    async query_network_snapshots({ snapshot_id }) {
+    async query_network_snapshots({ snapshot_id, ...params }) {
         const uri = snapshot_id ? '/network/snapshots/' + snapshot_id : '/network/snapshots'
-        return await this._request.get(uri)
+        return await this._request.get(uri, { params })
     },
     async query_external_transactions({ destination, tag, limit, offset, asset }) {
         const params = {
