@@ -1,11 +1,12 @@
 const zlib = require('zlib');
-const util = require('util');
 const WebSocket = require('ws');
 const MixinBase = require('./mixin')
+const _request = require('./http')
 
 class MixinSocket extends MixinBase {
     constructor(config) {
         super(config);
+        this._request = _request(config)
         this.url = 'wss://blaze.mixin.one/'
         this.protocols = 'Mixin-Blaze-1'
         this.isConnected = false;
