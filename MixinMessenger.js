@@ -98,10 +98,11 @@ MixinMessenger.prototype = {
             let res = await this._create_conversation(recipient_id)
             conversation_id = res.conversation_id
         }
+        if (typeof data === 'object') data = JSON.stringify(data)
         const params = {
             conversation_id, category,
             message_id: this.getUUID(),
-            data: Buffer.from(JSON.stringify(data)).toString('base64'),
+            data: Buffer.from(data).toString('base64'),
         }
         return await this._request.post('/messages', params)
     },
