@@ -1,9 +1,9 @@
 const zlib = require('zlib');
 const WebSocket = require('ws');
-const MixinBase = require('./mixin')
+const Mixin = require('./mixin')
 const _request = require('./http')
 
-class MixinSocket extends MixinBase {
+class MixinSocket extends Mixin {
     constructor(config) {
         super(config);
         this._request = _request(config)
