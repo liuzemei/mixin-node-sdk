@@ -61,12 +61,12 @@ class MixinSocket extends Mixin {
 
     _on_error(e) {
         console.log('ws error...', e)
+        this.start()
     }
 
     _on_close(e) {
-        setTimeout(() => {
-            this.start()
-        }, 5000)
+        console.log('ws close...', e)
+        this.start()
     }
 
 
@@ -79,11 +79,6 @@ class MixinSocket extends Mixin {
                 status: 'READ'
             }
         })
-    }
-
-
-    list_pending_messages() {
-        const id = this.getUUID();
     }
 
     decode(data) {
