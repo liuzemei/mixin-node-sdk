@@ -60,12 +60,10 @@ class MixinSocket extends Mixin {
 
 
     _on_error(e) {
-        console.log('ws error...', e)
         this.start()
     }
 
     _on_close(e) {
-        console.log('ws close...', e)
         this.start()
     }
 
