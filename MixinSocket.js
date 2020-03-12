@@ -16,7 +16,6 @@ class MixinSocket extends Mixin {
     const headers = {
       Authorization: `Bearer ${this.getJwtToken(this.CLIENT_CONFIG, 'GET', '/', '')}`
     }
-
     this.socket = new WebSocket(this.url, this.protocols, { headers })
     this.socket.onmessage = this._on_message.bind(this)
     this.socket.onopen = this._on_open.bind(this)
@@ -26,7 +25,7 @@ class MixinSocket extends Mixin {
 
 
   send_raw(message) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       try {
         const buffer = Buffer.from(JSON.stringify(message), 'utf-8');
         zlib.gzip(buffer, (_, zipped) => {
@@ -34,22 +33,25 @@ class MixinSocket extends Mixin {
             this.socket.send(zipped);
             resolve(true);
           } else {
-            reject(console.log('Socket connection not ready'));
+            if (this.debug) console.log('Socket connection not ready')
+            if (this.socket.readyState !== 1) this.start()
+            resolve(false);
           }
         });
       } catch (err) {
-        reject(err);
+        if (this.debug) console.log(err)
+        if (this.socket.readyState !== 1) this.start()
+        resolve(false);
       }
     });
   }
 
-  async get_message_handler(message) {
-  }
+  async get_message_handler(message) { }
 
-  _on_message(message) {
-    this.decode(message.data).then(async decoded => {
-      await this.get_message_handler(decoded)
-    })
+  async  _on_message(originData) {
+    let message = await this.decode(originData.data)
+    if (message === false) return this.socket.readyState !== 1 && this.start()
+    await this.get_message_handler(message)
   }
 
   _on_open() {
@@ -82,11 +84,12 @@ class MixinSocket extends Mixin {
   }
 
   decode(data) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       try {
         zlib.gunzip(data, (err, unzipped) => {
           if (err) {
-            return reject(err);
+            if (this.debug) console.error(err)
+            return resolve(false)
           }
           const msgObj = JSON.parse(unzipped.toString());
           if (msgObj && msgObj.action === 'CREATE_MESSAGE' && msgObj.data && msgObj.data.category === 'PLAIN_TEXT') {
@@ -95,7 +98,8 @@ class MixinSocket extends Mixin {
           resolve(msgObj);
         });
       } catch (err) {
-        reject(err);
+        if (this.debug) console.error(err)
+        return resolve(false)
       }
     });
   }
@@ -155,6 +159,14 @@ class MixinSocket extends Mixin {
 
   async send_message(data, message, type) {
     return await this.send_raw(this._create_message(data, message, type))
+  }
+
+  async send_messages(params) {
+    return await this.send_raw({
+      id: this.getUUID(),
+      action: "CREATE_PLAIN_MESSAGES",
+      params
+    })
   }
 }
 
