@@ -161,11 +161,11 @@ class MixinSocket extends Mixin {
     return await this.send_raw(this._create_message(data, message, type))
   }
 
-  async send_messages(params) {
+  async send_messages(messages) {
     return await this.send_raw({
       id: this.getUUID(),
       action: "CREATE_PLAIN_MESSAGES",
-      params
+      params: { messages }
     })
   }
 }
