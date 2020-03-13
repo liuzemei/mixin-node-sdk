@@ -30,7 +30,12 @@ fJ8KHnfjWjERGVnquCUm73MDJnXxqbivoXolv4tkuA==
 }
 
 
-const mixin_client = new Mixin(CLIENT_CONFIG)
+const mixin_client = new Mixin(CLIENT_CONFIG, true, true)
+// 1. 第一个参数是 keystore 的信息
+// 2. 第二个参数是 是否使用中国的域名加速，建议国内服务器填 true。
+// 3. 第三个参数是 是否打开 debug 模式，会在控制台显示一些 log 信息。
+
+
 const asset_id = '965e5c6e-434c-3fa9-b780-c50f43cd955c'
 
 // 更换 PIN
@@ -152,7 +157,11 @@ fJ8KHnfjWjERGVnquCUm73MDJnXxqbivoXolv4tkuA==
 }
 
 
-const mixin_client = new Mixin(CLIENT_CONFIG)
+const mixin_client = new Mixin(CLIENT_CONFIG, true, true)
+// 1. 第一个参数是 keystore 的信息
+// 2. 第二个参数是 是否使用中国的域名加速，建议国内服务器填 true。
+// 3. 第三个参数是 是否打开 debug 模式，会在控制台显示一些 log 信息。
+
 const asset_id = '965e5c6e-434c-3fa9-b780-c50f43cd955c'
 const recipient_id = 'e8e8cd79-cd40-4796-8c54-3a13cfe50115'
 
@@ -327,7 +336,10 @@ fJ8KHnfjWjERGVnquCUm73MDJnXxqbivoXolv4tkuA==
 }
 
 
-let socket_client = new MixinSocket(CLIENT_CONFIG)
+let socket_client = new MixinSocket(CLIENT_CONFIG, true, true)
+// 1. 第一个参数是 keystore 的信息
+// 2. 第二个参数是 是否使用中国的域名加速，建议国内服务器填 true。
+// 3. 第三个参数是 是否打开 debug 模式，会在控制台显示一些 log 信息。
 
 // 1.  重写这个接受消息的函数
 // 注意：有一个参数 message

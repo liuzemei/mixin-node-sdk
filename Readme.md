@@ -30,7 +30,11 @@ fJ8KHnfjWjERGVnquCUm73MDJnXxqbivoXolv4tkuA==
 }
 
 
-const mixin_client = new Mixin(CLIENT_CONFIG)
+const mixin_client = new Mixin(CLIENT_CONFIG, false, true)
+// 1. The first parameter is the information of the keystore
+// 2. The second parameter is whether to use Chinese domain name acceleration. It is recommended that Chinese servers fill in true.
+// 3. The third parameter is whether to enable debug mode, and some log information will be displayed on the console.
+
 const asset_id = '965e5c6e-434c-3fa9-b780-c50f43cd955c'
 
 // replace PIN
@@ -152,7 +156,11 @@ fJ8KHnfjWjERGVnquCUm73MDJnXxqbivoXolv4tkuA==
 }
 
 
-const mixin_client = new Mixin(CLIENT_CONFIG)
+const mixin_client = new Mixin(CLIENT_CONFIG, false, true)
+// 1. The first parameter is the information of the keystore
+// 2. The second parameter is whether to use Chinese domain name acceleration. It is recommended that Chinese servers fill in true.
+// 3. The third parameter is whether to enable debug mode, and some log information will be displayed on the console.
+
 const asset_id = '965e5c6e-434c-3fa9-b780-c50f43cd955c'
 const recipient_id = 'e8e8cd79-cd40-4796-8c54-3a13cfe50115'
 
@@ -327,7 +335,10 @@ fJ8KHnfjWjERGVnquCUm73MDJnXxqbivoXolv4tkuA==
 }
 
 
-let socket_client = new MixinSocket(CLIENT_CONFIG)
+let socket_client = new MixinSocket(CLIENT_CONFIG, false, true)
+// 1. The first parameter is the information of the keystore
+// 2. The second parameter is whether to use Chinese domain name acceleration. It is recommended that Chinese servers fill in true.
+// 3. The third parameter is whether to enable debug mode, and some log information will be displayed on the console.
 
 // 1.  Override this function that accepts messages
 // Note: there is a parameter message
