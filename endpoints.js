@@ -3,10 +3,10 @@ const Mixin = require('./mixin')
 const axios = require('axios')
 
 class MixinBase extends Mixin {
-  constructor(config, useChineseCDN, debug) {
+  constructor(config, userChinaServer, debug) {
     super(config);
     this.CLIENT_CONFIG = config
-    this._request = _request(config, useChineseCDN, debug)
+    this._request = _request(config, userChinaServer, debug)
   }
 
   async pin_update({ old_pin, pin }) {

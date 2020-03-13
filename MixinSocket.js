@@ -4,10 +4,10 @@ const Mixin = require('./mixin')
 const _request = require('./http')
 
 class MixinSocket extends Mixin {
-  constructor(config, useChineseCDN, debug) {
+  constructor(config, userChinaServer, debug) {
     super(config);
-    this._request = _request(config, useChineseCDN, debug)
-    this.url = useChineseCDN ? 'wss://mixin-blaze.zeromesh.net' : 'wss://blaze.mixin.one/'
+    this._request = _request(config, userChinaServer, debug)
+    this.url = userChinaServer ? 'wss://mixin-blaze.zeromesh.net' : 'wss://blaze.mixin.one/'
     this.protocols = 'Mixin-Blaze-1'
     this.debug = debug || false
   }
