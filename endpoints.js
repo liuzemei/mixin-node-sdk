@@ -176,7 +176,7 @@ class MixinBase extends Mixin {
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'APP_CARD'))
   }
   async _create_message(data, recipient_id, category) {
-    let { conversation_id } = await this.getConversationId(recipient_id)
+    let conversation_id = await this.getConversationId(recipient_id)
     data = typeof data === 'object' ? JSON.stringify(data) : data.toString()
     return {
       conversation_id,
@@ -187,13 +187,8 @@ class MixinBase extends Mixin {
   }
 
   async send_message({ recipient_id, data, category, _conversation_id }) {
-    let conversation_id = ''
     category === 'APP_BUTTON_GROUP' && !Array.isArray(data) && (data = [data])
-    if (_conversation_id) conversation_id = _conversation_id
-    else {
-      let res = await this.getConversationId(recipient_id)
-      conversation_id = res.conversation_id
-    }
+    let conversation_id = _conversation_id || this.getConversationId(recipient_id)
     if (typeof data === 'object') data = JSON.stringify(data)
     const params = {
       conversation_id, category,
