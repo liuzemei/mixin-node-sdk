@@ -1,9 +1,9 @@
 const axios = require('axios')
 const Mixin = require('./mixin')
 
-function _create_instance(CLIENT_CONFIG, debug) {
+function _create_instance(CLIENT_CONFIG, useChineseCDN, debug) {
   const instance = axios.create({
-    baseURL: 'https://api.mixin.one',
+    baseURL: useChineseCDN ? 'https://mixin-api.zeromesh.net' : 'https://api.mixin.one',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
