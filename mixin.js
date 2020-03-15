@@ -66,7 +66,7 @@ function signAuthenticationToken(uid, sid, privateKey, method, uri, body) {
   }
   let issuedAt = Math.floor(Date.now() / 1000)
   let md = forge.md.sha256.create();
-  md.update(method + uri + body);
+  md.update(method + uri + body, 'utf8');
   let payload = {
     uid: uid,
     sid: sid,
