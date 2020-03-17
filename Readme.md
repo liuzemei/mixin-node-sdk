@@ -343,13 +343,14 @@ let socket_client = new MixinSocket(CLIENT_CONFIG, false, true)
 // 1.  Override this function that accepts messages
 // Note: there is a parameter message
 socket_client.get_message_handler = async function (message) {
+
+    // Execute read message
+    await this.read_message(message)
+    
     if (!message.action || message.action === 'ACKNOWLEDGE_MESSAGE_RECEIPT' || message.action === 'LIST_PENDING_MESSAGES' || !message.data || !message.data.data) return;
     if (message.error) return console.log(message.error)
     // Get message
     console.log(message)
-
-    // Execute read message
-    await this.read_message(message)
 
     // Reply to a text message
     await this.send_text('hello mixin', message)

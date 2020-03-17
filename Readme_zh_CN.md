@@ -345,13 +345,13 @@ let socket_client = new MixinSocket(CLIENT_CONFIG, true, true)
 // 注意：有一个参数 message
 socket_client.get_message_handler = async function (message) {
 
+    // 执行已读消息
+    await this.read_message(message)
+
     if (!message.action || message.action === 'ACKNOWLEDGE_MESSAGE_RECEIPT' || message.action === 'LIST_PENDING_MESSAGES' || !message.data || !message.data.data) return;
     if (message.error) return console.log(message.error)
     // 获取消息
     console.log(message)
-
-    // 执行已读消息
-    await this.read_message(message)
 
     // 发送文本消息
     await this.send_text('hello mixin', message)
