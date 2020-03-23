@@ -9,8 +9,9 @@ function _create_instance(CLIENT_CONFIG, userChinaServer, debug) {
     }
   })
   instance.interceptors.request.use(config => {
-    const { method, url, data } = config
-    const jwtToken = Mixin.prototype.getJwtToken(CLIENT_CONFIG, method, url, data || '')
+    const { method, data } = config
+    const uri = instance.getUri(config)
+    const jwtToken = Mixin.prototype.getJwtToken(CLIENT_CONFIG, method, uri, data || '')
     config.headers.Authorization = 'Bearer ' + jwtToken
     return config
   })
