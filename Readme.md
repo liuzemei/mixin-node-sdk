@@ -169,7 +169,7 @@ mixin_client.query_me()
 
 
 // Update your own preferences for receiving messages
-mixin_client.update_perference({
+mixin_client.update_preference({
     receive_message_source: 'EVERYBODY', // CONTACTS
     accept_conversation_source: 'EVERYBODY'
 })

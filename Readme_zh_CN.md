@@ -170,7 +170,7 @@ mixin_client.query_me()
 
 
 // 更新自己的接收消息的偏好
-mixin_client.update_perference({
+mixin_client.update_preference({
     receive_message_source: 'EVERYBODY', // CONTACTS
     accept_conversation_source: 'EVERYBODY'
 })

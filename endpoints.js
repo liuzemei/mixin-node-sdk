@@ -3,10 +3,10 @@ const Mixin = require('./mixin')
 const axios = require('axios')
 
 class MixinBase extends Mixin {
-  constructor(config, userChinaServer, debug) {
+  constructor(config, useChinaServer, debug) {
     super(config);
     this.CLIENT_CONFIG = config
-    this._request = _request(config, userChinaServer, debug)
+    this._request = _request(config, useChinaServer, debug)
   }
 
   async pin_update({ old_pin, pin }) {
@@ -102,7 +102,7 @@ class MixinBase extends Mixin {
   async query_me() {
     return await this._request.get('/me')
   }
-  async update_perference({ receive_message_source, accept_conversation_source }) {
+  async update_preference({ receive_message_source, accept_conversation_source }) {
     const params = { receive_message_source, accept_conversation_source }
     return await this._request.post('/me/preferences', params)
   }
