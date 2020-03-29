@@ -62,9 +62,7 @@ class MixinSocket extends Mixin {
 
   _on_error(e) {
     if (this.debug) console.error(e)
-    setTimeout(() => {
-      this.start()
-    }, 2000)
+    this.socket.close()
   }
 
   _on_close(e) {
