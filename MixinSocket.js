@@ -16,6 +16,7 @@ class MixinSocket extends Mixin {
     const headers = {
       Authorization: `Bearer ${this.getJwtToken(this.CLIENT_CONFIG, 'GET', '/', '')}`
     }
+    if (this.socket && this.socket.readyState === 1) return
     this.socket = new WebSocket(this.url, this.protocols, { headers })
     this.socket.onmessage = this._on_message.bind(this)
     this.socket.onopen = this._on_open.bind(this)
@@ -34,13 +35,13 @@ class MixinSocket extends Mixin {
             resolve(true);
           } else {
             if (this.debug) console.log('Socket connection not ready')
-            if (this.socket.readyState !== 1) this.start()
+            if (this.socket.readyState !== 1) this.socket.close()
             resolve(false);
           }
         });
       } catch (err) {
         if (this.debug) console.log(err)
-        if (this.socket.readyState !== 1) this.start()
+        if (this.socket.readyState !== 1) this.socket.close()
         resolve(false);
       }
     });
