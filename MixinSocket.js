@@ -35,13 +35,11 @@ class MixinSocket extends Mixin {
             resolve(true);
           } else {
             if (this.debug) console.log('Socket connection not ready')
-            if (this.socket.readyState !== 1) this.socket.close()
             resolve(false);
           }
         });
       } catch (err) {
         if (this.debug) console.log(err)
-        if (this.socket.readyState !== 1) this.socket.close()
         resolve(false);
       }
     });
@@ -51,7 +49,7 @@ class MixinSocket extends Mixin {
 
   async  _on_message(originData) {
     let message = await this.decode(originData.data)
-    if (message === false) return this.socket.readyState !== 1 && this.start()
+    if (message === false) return this.socket.readyState !== 1 && this.socket.close()
     await this.get_message_handler(message)
   }
 
