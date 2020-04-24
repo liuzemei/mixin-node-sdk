@@ -13,15 +13,22 @@ class MixinSocket extends Mixin {
   }
 
   start() {
+    let self = this;
+    if (self.socket && self.socket.readyState === 1) return
     const headers = {
-      Authorization: `Bearer ${this.getJwtToken(this.CLIENT_CONFIG, 'GET', '/', '')}`
+      Authorization: `Bearer ${self.getJwtToken(self.CLIENT_CONFIG, 'GET', '/', '')}`
     }
-    if (this.socket && this.socket.readyState === 1) return
-    this.socket = new WebSocket(this.url, this.protocols, { headers })
-    this.socket.onmessage = this._on_message.bind(this)
-    this.socket.onopen = this._on_open.bind(this)
-    this.socket.onerror = this._on_error.bind(this)
-    this.socket.onclose = this._on_close.bind(this)
+    try {
+      self.socket = new WebSocket(self.url, self.protocols, { headers })
+      self.socket.onmessage = self._on_message.bind(self)
+      self.socket.onopen = self._on_open.bind(self)
+      self.socket.onerror = self._on_error.bind(self)
+      self.socket.onclose = self._on_close.bind(self)
+    } catch (e) {
+      setTimeout(() => {
+        self.start()
+      }, 2000)
+    }
   }
 
 
