@@ -10,43 +10,47 @@ class MixinSocket extends Mixin {
     this.url = useChinaServer ? 'wss://mixin-blaze.zeromesh.net' : 'wss://blaze.mixin.one/'
     this.protocols = 'Mixin-Blaze-1'
     this.debug = debug || false
+    this.wsInterval = null
+    this.ws = null
   }
 
   start() {
-    let self = this;
-    if (self.socket && self.socket.readyState === 1) return
-    const headers = {
-      Authorization: `Bearer ${self.getJwtToken(self.CLIENT_CONFIG, 'GET', '/', '')}`
+    if (this.ws && this.ws.readyState === WebSocket.CONNECTING) return
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.close(1000)
+      this.ws = null
     }
-    try {
-      self.socket = new WebSocket(self.url, self.protocols, { headers })
-      self.socket.onmessage = self._on_message.bind(self)
-      self.socket.onopen = self._on_open.bind(self)
-      self.socket.onerror = self._on_error.bind(self)
-      self.socket.onclose = self._on_close.bind(self)
-    } catch (e) {
-      setTimeout(() => {
-        self.start()
-      }, 2000)
-    }
-  }
 
+    const headers = {
+      Authorization: `Bearer ${this.getJwtToken(this.CLIENT_CONFIG, 'GET', '/', '')}`
+    }
+    this.ws = new WebSocket(this.url, this.protocols, { headers })
+    this.ws.onmessage = this._on_message.bind(this)
+    this.ws.onerror = this._on_error.bind(this)
+    this.ws.onclose = this._on_close.bind(this)
+    this.ws.onopen = this._on_open.bind(this)
+
+    clearInterval(this.wsInterval)
+    this.wsInterval = setInterval(() => {
+      if (this.ws && this.ws.readyState !== WebSocket.OPEN) {
+        this.start()
+      }
+    }, 15000)
+  }
 
   send_raw(message) {
     return new Promise((resolve) => {
       try {
         const buffer = Buffer.from(JSON.stringify(message), 'utf-8');
         zlib.gzip(buffer, (_, zipped) => {
-          if (this.socket.readyState === WebSocket.OPEN) {
-            this.socket.send(zipped);
+          if (this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(zipped);
             resolve(true);
           } else {
-            if (this.debug) console.log('Socket connection not ready')
             resolve(false);
           }
         });
-      } catch (err) {
-        if (this.debug) console.log(err)
+      } catch (e) {
         resolve(false);
       }
     });
@@ -56,28 +60,25 @@ class MixinSocket extends Mixin {
 
   async  _on_message(originData) {
     let message = await this.decode(originData.data)
-    if (message === false) return this.socket.readyState !== 1 && this.socket.close()
+    if (message === false) return this.ws.readyState !== WebSocket.OPEN && this.start()
     await this.get_message_handler(message)
   }
 
   _on_open() {
-    if (this.debug) console.log('ws connected...')
+    if (this.debug) console.error('ws connected...' + new Date().toISOString())
     this.send_raw({ id: this.getUUID(), action: 'LIST_PENDING_MESSAGES' })
   }
 
 
   _on_error(e) {
     if (this.debug) console.error(e)
-    setTimeout(() => {
-      this.start()
-    }, 2000)
   }
 
   _on_close(e) {
     if (this.debug) console.error(e)
     setTimeout(() => {
       this.start()
-    }, 2000)
+    }, 1000)
   }
 
 
@@ -98,7 +99,6 @@ class MixinSocket extends Mixin {
       try {
         zlib.gunzip(data, (err, unzipped) => {
           if (err) {
-            if (this.debug) console.error(err)
             return resolve(false)
           }
           const msgObj = JSON.parse(unzipped.toString());
@@ -107,8 +107,7 @@ class MixinSocket extends Mixin {
           }
           resolve(msgObj);
         });
-      } catch (err) {
-        if (this.debug) console.error(err)
+      } catch (e) {
         return resolve(false)
       }
     });
