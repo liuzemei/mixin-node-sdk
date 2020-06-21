@@ -9,8 +9,8 @@ class MixinBase {
     this.CLIENT_CONFIG = config
   }
 
-  getJwtToken({ client_id: uid, session_id: sid, private_key: privateKey }, method, url, body) {
-    return signAuthenticationToken(uid, sid, privateKey, method, url, body)
+  getJwtToken({ client_id: uid, session_id: sid, private_key: privateKey }, method, url, body, scp) {
+    return signAuthenticationToken(uid, sid, privateKey, method, url, body, scp)
   }
 
   signPin(_pin) {
@@ -58,7 +58,7 @@ function _getUUID() {
   });
 }
 
-function signAuthenticationToken(uid, sid, privateKey, method, uri, body) {
+function signAuthenticationToken(uid, sid, privateKey, method, uri, body, scp) {
   uri = uri.replace('https://api.mixin.one', '')
   method = method.toLocaleUpperCase();
   if (typeof (body) === "object") {
@@ -74,7 +74,7 @@ function signAuthenticationToken(uid, sid, privateKey, method, uri, body) {
     exp: issuedAt + 3600,
     jti: _getUUID(),
     sig: md.digest().toHex(),
-    scp: 'FULL'
+    scp: scp || 'FULL'
   };
   return jwt.sign(payload, privateKey, { algorithm: 'RS512' });
 }
