@@ -73,7 +73,8 @@ function signAuthenticationToken(uid, sid, privateKey, method, uri, body) {
     iat: issuedAt,
     exp: issuedAt + 3600,
     jti: _getUUID(),
-    sig: md.digest().toHex()
+    sig: md.digest().toHex(),
+    scp: 'FULL'
   };
   return jwt.sign(payload, privateKey, { algorithm: 'RS512' });
 }
