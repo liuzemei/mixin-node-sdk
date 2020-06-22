@@ -9,6 +9,12 @@ class MixinBase extends Mixin {
     this._request = _request(config, useChinaServer, debug)
   }
 
+  async authenticate({ code }) {
+    let { client_id, client_secret } = this.CLIENT_CONFIG
+    let params = { code, client_id, client_secret }
+    return await this._request.post('/oauth/token', params)
+  }
+
   async pin_update({ old_pin, pin }) {
     const params = {
       // reference: https://developers.mixin.one/api/alpha-mixin-network/create-pin/
@@ -68,6 +74,10 @@ class MixinBase extends Mixin {
   }
   async query_transfer({ trace_id }) {
     return await this._request.get('/transfers/trace/' + trace_id)
+  }
+  async query_snapshot({ limit, offset, asset } = {}) {
+    let params = { limit, offset, asset }
+    return await this._request.get('/snapshots', { params })
   }
   async query_network_top_assets() {
     return await this._request.get('/network/assets/top')
