@@ -139,13 +139,8 @@ class MixinSocket extends Mixin {
     return new Promise((resolve) => {
       try {
         zlib.gunzip(data, (err, unzipped) => {
-          if (err) {
-            return resolve(false)
-          }
+          if (err) return resolve(false)
           const msgObj = JSON.parse(unzipped.toString());
-          if (msgObj && msgObj.action === 'CREATE_MESSAGE' && msgObj.data && msgObj.data.category === 'PLAIN_TEXT') {
-            msgObj.data.data = Buffer.from(msgObj.data.data, 'base64').toString('utf-8');
-          }
           resolve(msgObj);
         });
       } catch (e) {

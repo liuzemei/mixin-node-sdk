@@ -29,7 +29,7 @@ function _create_instance(CLIENT_CONFIG, useChinaServer, debug) {
     let { data } = res
     if (debug) console.log(data)
     return data.data || data.error
-  }, e => {
+  }, async e => {
     await backOff()
     return await instance(e.config)
   })
