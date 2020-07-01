@@ -208,6 +208,10 @@ class MixinBase extends Mixin {
     return await this._request.post('/messages', params)
   }
 
+  async messages(params) {
+    return await this._request.post('/messages', params)
+  }
+
   async _create_conversation(recipient_id) {
     const params = {
       category: 'CONTACT',
