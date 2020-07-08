@@ -33,6 +33,9 @@ class MixinBase extends Mixin {
     let uri = asset_id ? '/assets/' + asset_id : '/assets'
     return await this._request.get(uri)
   }
+  async query_asset_fee({ asset_id }) {
+    return await this._request.get('/assets/' + asset_id + '/fee')
+  }
   async create_address({ asset_id, destination, tag, label }) {
     const params = {
       asset_id, label, destination,
@@ -79,6 +82,9 @@ class MixinBase extends Mixin {
     let params = { limit, offset, asset }
     return await this._request.get('/snapshots', { params })
   }
+  async query_fiats() {
+    return await this._request.get('/fiats')
+  }
   async query_network_top_assets() {
     return await this._request.get('/network/assets/top')
   }
@@ -90,9 +96,7 @@ class MixinBase extends Mixin {
     return await this._request.get(uri, { params })
   }
   async query_external_transactions({ destination, tag, limit, offset, asset }) {
-    const params = {
-      destination, tag, limit, offset, asset
-    }
+    const params = { destination, tag, limit, offset, asset }
     let uri = '/external/transactions?'
     for (let key in params) {
       if (params[key]) uri += key + '=' + params[key] + '&'
@@ -107,8 +111,6 @@ class MixinBase extends Mixin {
     const params = { full_name, session_secret }
     return await this._request.post('/users', params)
   }
-
-
   async query_me() {
     return await this._request.get('/me')
   }
@@ -122,6 +124,12 @@ class MixinBase extends Mixin {
   }
   async rotate_qr_code() {
     return await this._request.get('/me/code')
+  }
+  async query_user_by_id({ user_id }) {
+    return await this._request.get('/users/' + user_id)
+  }
+  async query_user_by_number({ mixin_number }) {
+    return await this.search_user({ mixin_number })
   }
   async query_user_fetch(users) {
     users = Array.isArray(users) ? users : [users]
@@ -154,8 +162,26 @@ class MixinBase extends Mixin {
   async query_contacts() {
     return await this._request.get('/contacts')
   }
+  async create_conversation({ category, conversation_id, participants, action, role, user_id }) {
+    return await this._request.post('/conversations', { category, conversation_id, participants, action, role, user_id })
+  }
+  async rotate_conversation({ conversation_id, name, announcement }) {
+    return await this._request.post('/conversations/' + conversation_id + '/rotate', { name, announcement })
+  }
+  async update_conversation({ conversation_id, name, announcement }) {
+    return await this._request.post('/conversations/' + conversation_id, { name, announcement })
+  }
   async query_conversations({ conversation_id }) {
     return await this._request.get('/conversations/' + conversation_id)
+  }
+  async participants_actions({ conversation_id, action, participants }) {
+    return await this._request.post(`/conversations/${conversation_id}/participants/${action}`, participants)
+  }
+  async create_acknowledgements(message_list) {
+    return await this._request.post('/acknowledgements', message_list)
+  }
+  async create_messages(params) {
+    return await this.messages(params)
   }
   async send_text({ recipient_id, data }) {
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'PLAIN_TEXT'))
@@ -211,6 +237,7 @@ class MixinBase extends Mixin {
   async messages(params) {
     return await this._request.post('/messages', params)
   }
+
 
   async _create_conversation(recipient_id) {
     const params = {
