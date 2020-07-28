@@ -1,6 +1,6 @@
 {
   "name": "mixin-node-sdk",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "The most convenient Mixin Nodejs SDK",
   "main": "index.js",
   "scripts": {
