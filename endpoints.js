@@ -187,7 +187,6 @@ class MixinBase extends Mixin {
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'PLAIN_TEXT'))
   }
   async send_image({ recipient_id, data }) {
-    !Array.isArray(data) && (data = [data])
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'PLAIN_IMAGE'))
   }
   async send_video({ recipient_id, data }) {
@@ -206,6 +205,7 @@ class MixinBase extends Mixin {
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'PLAIN_CONTACT'))
   }
   async send_buttons({ recipient_id, data }) {
+    !Array.isArray(data) && (data = [data])
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'APP_BUTTON_GROUP'))
   }
   async send_app({ recipient_id, data }) {
