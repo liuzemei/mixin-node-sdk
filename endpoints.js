@@ -67,6 +67,7 @@ class MixinBase extends Mixin {
     return await this._request.post('/payments', params)
   }
   async transfer({ amount, asset_id, opponent_id, memo }) {
+    if (typeof amount !== 'number') amount = Number(amount)
     const params = {
       amount, asset_id, opponent_id,
       pin: this.signPin(),
