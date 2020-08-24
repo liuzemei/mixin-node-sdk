@@ -67,7 +67,7 @@ class MixinBase extends Mixin {
     return await this._request.post('/payments', params)
   }
   async transfer({ amount, asset_id, opponent_id, memo }) {
-    if (typeof amount !== 'number') amount = Number(amount)
+    if (typeof amount !== 'string') amount = String(amount)
     const params = {
       amount, asset_id, opponent_id,
       pin: this.signPin(),
@@ -212,8 +212,8 @@ class MixinBase extends Mixin {
   async send_app({ recipient_id, data }) {
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'APP_CARD'))
   }
-  async _create_message(data, recipient_id, category) {
-    let conversation_id = await this.getConversationId(recipient_id)
+  _create_group_message(data, recipient_id, category) {
+    let conversation_id = this.getConversationId(recipient_id)
     data = typeof data === 'object' ? JSON.stringify(data) : data.toString()
     return {
       conversation_id,
@@ -221,6 +221,11 @@ class MixinBase extends Mixin {
       message_id: this.getUUID(),
       data: Buffer.from(data).toString('base64')
     }
+  }
+  _create_message(data, recipient_id, category) {
+    let result = this._create_group_message(data, recipient_id, category)
+    result.recipient_id = recipient_id
+    return result
   }
 
   async send_message({ recipient_id, data, category, _conversation_id }) {
