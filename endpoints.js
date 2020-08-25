@@ -212,6 +212,8 @@ class MixinBase extends Mixin {
   async send_app({ recipient_id, data }) {
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'APP_CARD'))
   }
+
+
   _create_group_message(data, recipient_id, category) {
     let conversation_id = this.getConversationId(recipient_id)
     data = typeof data === 'object' ? JSON.stringify(data) : data.toString()
@@ -225,6 +227,12 @@ class MixinBase extends Mixin {
   _create_message(data, recipient_id, category) {
     let result = this._create_group_message(data, recipient_id, category)
     result.recipient_id = recipient_id
+    return result
+  }
+
+  _create_group_message_specific(data, recipient_id, category, conversation_id) {
+    let result = this._create_message(data, recipient_id, category)
+    result.conversation_id = conversation_id
     return result
   }
 
