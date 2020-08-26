@@ -29,7 +29,7 @@ class MixinBase extends Mixin {
     }
     return await this._request.post('/pin/verify', params)
   }
-  async query_assets({ asset_id }) {
+  async query_assets({ asset_id } = {}) {
     let uri = asset_id ? '/assets/' + asset_id : '/assets'
     return await this._request.get(uri)
   }
