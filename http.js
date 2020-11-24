@@ -21,7 +21,7 @@ function _create_instance(CLIENT_CONFIG, useChinaServer, debug) {
     const { method, data } = config
     const uri = instance.getUri(config)
     const jwtToken = Mixin.prototype.getJwtToken(CLIENT_CONFIG, method, uri, data || '')
-    config.headers.Authorization = 'Bearer ' + jwtToken
+    !config.headers.Authorization && (config.headers.Authorization = 'Bearer ' + jwtToken)
     return config
   })
 
