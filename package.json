@@ -1,6 +1,6 @@
 {
   "name": "mixin-node-sdk",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "The most convenient Mixin Nodejs SDK",
   "main": "index.js",
   "scripts": {
@@ -26,9 +26,9 @@
   "homepage": "https://github.com/liuzemei/mixin-node-sdk#readme",
   "dependencies": {
     "axios": "^0.19.0",
-    "int64-buffer": "^0.99.1007",
+    "int64-buffer": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
-    "node-forge": "^0.9.1",
-    "ws": "^7.2.1"
+    "node-forge": "^0.10.0",
+    "ws": "^7.4.1"
   }
 }
