@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/liuzemei/mixin-node-sdk#readme",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "int64-buffer": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "node-forge": "^0.10.0",
