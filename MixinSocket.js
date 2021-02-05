@@ -3,11 +3,14 @@ const WebSocket = require('ws');
 const Mixin = require('./mixin')
 const _request = require('./http')
 
+const zeromeshUrl = 'wss://mixin-blaze.zeromesh.net'
+const oneUrl = 'wss://blaze.mixin.one/'
+
 class MixinSocket extends Mixin {
   constructor(config, useChinaServer, debug) {
     super(config);
     this._request = _request(config, useChinaServer, debug)
-    this.url = useChinaServer ? 'wss://mixin-blaze.zeromesh.net' : 'wss://blaze.mixin.one/'
+    this.url = useChinaServer ? zeromeshUrl : oneUrl
     this.protocols = 'Mixin-Blaze-1'
     this.debug = debug || false
     this.ws = null
@@ -49,6 +52,8 @@ class MixinSocket extends Mixin {
   }
 
   _on_error(e) {
+    if (e.message === "Opening handshake has timed out")
+      this.url = this.url === zeromeshUrl ? oneUrl : zeromeshUrl
     if (this.debug) console.error(e)
   }
 

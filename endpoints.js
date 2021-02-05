@@ -66,12 +66,12 @@ class MixinBase extends Mixin {
     const params = { asset_id, opponent_id, amount, trace_id }
     return await this._request.post('/payments', params)
   }
-  async transfer({ amount, asset_id, opponent_id, memo }) {
+  async transfer({ amount, asset_id, opponent_id, memo, trace_id }) {
     if (typeof amount !== 'string') amount = String(amount)
     const params = {
       amount, asset_id, opponent_id,
       pin: this.signPin(),
-      trace_id: this.getUUID(),
+      trace_id: trace_id || this.getUUID(),
       memo: memo || ''
     }
     return await this._request.post('/transfers', params)
