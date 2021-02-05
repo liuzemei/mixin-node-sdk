@@ -1,6 +1,6 @@
 const forge = require('node-forge');
 const jwt = require('jsonwebtoken');
-const { Int64BE } = require('int64-buffer');
+const { Uint64LE } = require('int64-buffer');
 const crypto = require('crypto');
 const crypto_scalarmult = require('./ed25519')
 class MixinBase {
@@ -107,13 +107,11 @@ function signEncryptedPin(pin, pinToken, sessionId, privateKey, iterator) {
   let _privateKey = toBuffer(privateKey, 'base64');
   let pinKey = _privateKey.length === 64 ? signEncryptEd25519PIN(pinToken, _privateKey) : signPin(pinToken, privateKey, sessionId)
 
-  let time = new Int64BE(Date.now() / 1000 | 0);
-  time = [...time.toBuffer()].reverse();
+  let time = new Uint64LE(Date.now() / 1000 | 0).toBuffer();
   if (iterator == undefined || iterator === "") {
     iterator = Date.now() * 1000000;
   }
-  iterator = new Int64BE(iterator);
-  iterator = [...iterator.toBuffer()].reverse();
+  iterator = new Uint64LE(iterator).toBuffer();
   pin = Buffer.from(pin, 'utf8');
   let buf = Buffer.concat([pin, Buffer.from(time), Buffer.from(iterator)]);
   let padding = blockSize - buf.length % blockSize;
@@ -168,9 +166,8 @@ function privateKeyToCurve25519(privateKey) {
 
 function hexToBytes(hex) {
   const bytes = new Uint8Array(32);
-  let i = 0
   for (let c = 0; c < hex.length; c += 2) {
-    bytes[i++] = parseInt(hex.substr(c, 2), 16)
+    bytes[c / 2] = parseInt(hex.substr(c, 2), 16)
   }
   return bytes
 }
