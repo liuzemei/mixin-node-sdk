@@ -1,6 +1,7 @@
 const _request = require('./http')
 const Mixin = require('./mixin')
 const axios = require('axios')
+const forge = require('node-forge')
 
 class MixinBase extends Mixin {
   constructor(config, useChinaServer, debug) {
@@ -108,9 +109,16 @@ class MixinBase extends Mixin {
   async query_network_asset_by_symbol({ symbol }) {
     return await this._request.get('/network/assets/search/' + symbol)
   }
-  async create_user({ full_name, session_secret }) {
-    const params = { full_name, session_secret }
-    return await this._request.post('/users', params)
+  async create_user({ full_name, session_secret = "" }) {
+    if (session_secret) return this._request.post('/users', { full_name, session_secret })
+    const { publicKey, privateKey } = forge.pki.ed25519.generateKeyPair()
+    const params = { full_name, session_secret: Buffer.from(publicKey).toString('base64') }
+    const res = await this._request.post('/users', params)
+    return {
+      ...res,
+      publicKey: publicKey.toString('base64'),
+      privateKey: privateKey.toString('base64'),
+    }
   }
   async query_me() {
     return await this._request.get('/me')

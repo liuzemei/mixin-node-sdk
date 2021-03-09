@@ -117,13 +117,8 @@ mixin_client.query_external_transactions({
 mixin_client.query_network_asset_by_symbol({ symbol: 'EOS' })
 
 // 创建用户， session_secret 请填写 RSA 公钥的 Base64，可自行百度 RSA 生成， 请保存好私钥
-mixin_client.create_user({
-    full_name: 'test',
-    session_secret: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8wF10XuA2i90YC1peIY4ZzL0N\n' +
-        'pdbXw8uNakCIjMnBeAGGHFvBFgU11uf1asP/8rtLLZfiNwwFlrayErT6SyDB27qv\n' +
-        'POb/vaS4X6mfz9qA0nEz4pHvoTnNV0/L+VftHA43uq46VObDejKJp2wuniY1AT22\n' +
-        'D+NWTjvp/IZ0FvMVqwIDAQAB'
-})
+// 若不传 session_secret 返回的 base64 之后 privateKey 和 publickKey 请保存好。
+mixin_client.create_user({full_name: 'test', session_secret: ""})
 
 
 ```
