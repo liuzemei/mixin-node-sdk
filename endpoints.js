@@ -5,7 +5,7 @@ const forge = require('node-forge')
 
 class MixinBase extends Mixin {
   constructor(config, useChinaServer, debug) {
-    super(config);
+    super(config)
     this.CLIENT_CONFIG = config
     this._request = _request(config, useChinaServer, debug)
   }
@@ -191,6 +191,9 @@ class MixinBase extends Mixin {
   }
   async create_messages(params) {
     return await this.messages(params)
+  }
+  async create_transactions({ asset_id, opponent_multisig, amount, pin, trace_id, memo }) {
+    return await this._request.post('/transactions', { asset_id, opponent_multisig, amount, pin, trace_id, memo })
   }
   async send_text({ recipient_id, data }) {
     return await this._request.post('/messages', await this._create_message(data, recipient_id, 'PLAIN_TEXT'))
