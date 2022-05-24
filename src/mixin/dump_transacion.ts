@@ -1,11 +1,5 @@
 import { GhostKeys, Transaction } from '../types';
-import {
-  Encoder,
-  magic,
-  maxEcodingInt,
-  OperatorCmp,
-  OperatorSum,
-} from './encoder';
+import { Encoder, magic, maxEcodingInt, OperatorCmp, OperatorSum } from './encoder';
 
 export function dumpTransaction(signed: Transaction): string {
   let enc = new Encoder(magic);
@@ -14,11 +8,11 @@ export function dumpTransaction(signed: Transaction): string {
 
   const il = signed.inputs!.length;
   enc.writeInt(il);
-  signed.inputs!.forEach((i) => enc.encodeInput(i));
+  signed.inputs!.forEach(i => enc.encodeInput(i));
 
   const ol = signed.outputs!.length;
   enc.writeInt(ol);
-  signed.outputs!.forEach((o) => enc.encodeOutput(o));
+  signed.outputs!.forEach(o => enc.encodeOutput(o));
 
   const e = Buffer.from(signed.extra!, 'base64');
   enc.writeInt(e.byteLength);
@@ -37,11 +31,7 @@ export function dumpTransaction(signed: Transaction): string {
   return enc.buf.toString('hex');
 }
 
-export function DumpOutputFromGhostKey(
-  gi: GhostKeys,
-  amount: string,
-  threshold: number
-) {
+export function DumpOutputFromGhostKey(gi: GhostKeys, amount: string, threshold: number) {
   const { mask, keys } = gi;
   return {
     mask,

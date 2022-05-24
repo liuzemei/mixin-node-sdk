@@ -38,19 +38,12 @@ export class MessageClient implements MessageClientRequest {
     return this.request.post('/messages', messages);
   }
 
-  sendMsg(
-    recipient_id: string,
-    category: MessageCategory,
-    data: any
-  ): Promise<MessageView> {
+  sendMsg(recipient_id: string, category: MessageCategory, data: any): Promise<MessageView> {
     if (typeof data === 'object') data = JSON.stringify(data);
     return this.sendMessage({
       category,
       recipient_id,
-      conversation_id: this.uniqueConversationID(
-        this.keystore.client_id,
-        recipient_id
-      ),
+      conversation_id: this.uniqueConversationID(this.keystore.client_id, recipient_id),
       message_id: this.newUUID(),
       data: base64url(Buffer.from(data)),
     });
@@ -74,19 +67,13 @@ export class MessageClient implements MessageClientRequest {
   sendDataMsg(userID: string, data: DataMessage): Promise<MessageView> {
     return this.sendMsg(userID, 'PLAIN_DATA', data);
   }
-  sendStickerMsg(
-    userID: string,
-    sticker: StickerMessage
-  ): Promise<MessageView> {
+  sendStickerMsg(userID: string, sticker: StickerMessage): Promise<MessageView> {
     return this.sendMsg(userID, 'PLAIN_STICKER', sticker);
   }
   sendContactMsg(userID: string, contact: ContactMesage): Promise<MessageView> {
     return this.sendMsg(userID, 'PLAIN_CONTACT', contact);
   }
-  sendAppCardMsg(
-    userID: string,
-    appCard: AppCardMessage
-  ): Promise<MessageView> {
+  sendAppCardMsg(userID: string, appCard: AppCardMessage): Promise<MessageView> {
     return this.sendMsg(userID, 'APP_CARD', appCard);
   }
   sendAudioMsg(userID: string, audio: AudioMessage): Promise<MessageView> {
@@ -98,16 +85,10 @@ export class MessageClient implements MessageClientRequest {
   sendVideoMsg(userID: string, video: VideoMessage): Promise<MessageView> {
     return this.sendMsg(userID, 'PLAIN_VIDEO', video);
   }
-  sendLocationMsg(
-    userID: string,
-    location: LocationMessage
-  ): Promise<MessageView> {
+  sendLocationMsg(userID: string, location: LocationMessage): Promise<MessageView> {
     return this.sendMsg(userID, 'PLAIN_LOCATION', location);
   }
-  sendAppButtonMsg(
-    userID: string,
-    appButton: AppButtonMessage[]
-  ): Promise<MessageView> {
+  sendAppButtonMsg(userID: string, appButton: AppButtonMessage[]): Promise<MessageView> {
     return this.sendMsg(userID, 'APP_BUTTON_GROUP', appButton);
   }
   sendRecallMsg(userID: string, message: RecallMessage): Promise<MessageView> {

@@ -1,6 +1,6 @@
 import { Aggregated, Input, Output } from '../types';
-import { BN } from "bn.js";
-import { parse } from 'uuid'
+import { BN } from 'bn.js';
+import { parse } from 'uuid';
 const aggregatedSignaturePrefix = 0xff01;
 const empty = Buffer.from([0x00, 0x00]);
 
@@ -66,9 +66,8 @@ export class Encoder {
   }
 
   writeUUID(id: string) {
-    const uuid: any = parse(id)
-    for (let i = 0; i < uuid.length; i++)
-      this.write(Buffer.from([uuid[i]]));
+    const uuid: any = parse(id);
+    for (let i = 0; i < uuid.length; i++) this.write(Buffer.from([uuid[i]]));
   }
 
   encodeInput(i: Input) {
@@ -117,7 +116,7 @@ export class Encoder {
     this.writeInteger(new BN(1e8).mul(new BN(o.amount!)).toNumber());
     this.writeInt(o.keys!.length);
 
-    o.keys!.forEach((k) => this.write(Buffer.from(k, 'hex')));
+    o.keys!.forEach(k => this.write(Buffer.from(k, 'hex')));
 
     this.write(Buffer.from(o.mask!, 'hex'));
 
@@ -174,12 +173,12 @@ export class Encoder {
       // TODO... not check...
       this.write(Buffer.from([0x01]));
       this.writeInt(js.signature.length);
-      js.signers.forEach((m) => this.writeInt(m));
+      js.signers.forEach(m => this.writeInt(m));
       return;
     }
 
     const masks = Buffer.alloc((((max / 8) | 0) + 1) | 0);
-    js.signers.forEach((m) => (masks[(m / 8) | 0] ^= 1 << (m % 8 | 0)));
+    js.signers.forEach(m => (masks[(m / 8) | 0] ^= 1 << (m % 8 | 0)));
     this.write(Buffer.from([0x00]));
     this.writeInt(masks.length);
     this.write(masks);
@@ -191,7 +190,7 @@ export class Encoder {
       .sort((a, b) => Number(a.index) - Number(b.index));
 
     this.writeInt(ss.length);
-    ss.forEach((s) => {
+    ss.forEach(s => {
       this.wirteUint16(Number(s.index));
       this.write(Buffer.from(s.sig, 'hex'));
     });

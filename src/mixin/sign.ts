@@ -10,10 +10,7 @@ export const getSignPIN = (keystore: Keystore, pin?: any, iterator?: any) => {
   const blockSize = 16;
 
   let _privateKey: any = toBuffer(private_key, 'base64');
-  let pinKey =
-    _privateKey.length === 64
-      ? signEncryptEd25519PIN(pin_token, _privateKey)
-      : signPin(pin_token, private_key, session_id);
+  let pinKey = _privateKey.length === 64 ? signEncryptEd25519PIN(pin_token, _privateKey) : signPin(pin_token, private_key, session_id);
 
   let time = new Uint64LE((Date.now() / 1000) | 0).toBuffer();
   if (iterator == undefined || iterator === '') {
@@ -47,20 +44,14 @@ export function getEd25519Sign(payload: any, privateKey: any) {
   const header = toBuffer({ alg: 'EdDSA', typ: 'JWT' }).toString('base64');
   payload = base64url(toBuffer(payload));
   const result = [header, payload];
-  const sign = base64url(Buffer.from(pki.ed25519.sign({ message: result.join('.'), encoding: 'utf8', privateKey, })));
+  const sign = base64url(Buffer.from(pki.ed25519.sign({ message: result.join('.'), encoding: 'utf8', privateKey })));
   result.push(sign);
   return result.join('.');
 }
 
-export const signRequest = (
-  method: string,
-  url: string,
-  body: object | string = ''
-): string => {
-  if (url.startsWith('https://api.mixin.one'))
-    url = url.replace('https://api.mixin.one', '');
-  if (url.startsWith('https://mixin-api.zeromesh.net'))
-    url = url.replace('https://mixin-api.zeromesh.net', '');
+export const signRequest = (method: string, url: string, body: object | string = ''): string => {
+  if (url.startsWith('https://api.mixin.one')) url = url.replace('https://api.mixin.one', '');
+  if (url.startsWith('https://mixin-api.zeromesh.net')) url = url.replace('https://mixin-api.zeromesh.net', '');
   if (typeof body === 'object') body = JSON.stringify(body);
   method = method.toUpperCase();
   return md.sha256
@@ -102,11 +93,7 @@ function scalarMult(curvePriv: any, publicKey: any) {
 }
 
 export function base64url(buffer: Buffer) {
-  return Buffer.from(buffer)
-    .toString('base64')
-    .replace(/\=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
+  return Buffer.from(buffer).toString('base64').replace(/\=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
 function privateKeyToCurve25519(privateKey: any) {

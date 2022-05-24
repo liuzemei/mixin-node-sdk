@@ -1,9 +1,4 @@
-import {
-  Keystore,
-  Address,
-  AddressCreateParams,
-  AddressClientRequest,
-} from '../types';
+import { Keystore, Address, AddressCreateParams, AddressClientRequest } from '../types';
 import { AxiosInstance } from 'axios';
 import { getSignPIN } from '../mixin/sign';
 

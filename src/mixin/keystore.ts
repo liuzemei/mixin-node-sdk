@@ -23,8 +23,6 @@ export class KeystoreAuth {
       scp: scope || 'FULL',
     };
     let _privateKey = toBuffer(private_key, 'base64');
-    return _privateKey.length === 64
-      ? getEd25519Sign(payload, _privateKey)
-      : sign(payload, private_key, { algorithm: 'RS512' });
+    return _privateKey.length === 64 ? getEd25519Sign(payload, _privateKey) : sign(payload, private_key, { algorithm: 'RS512' });
   }
 }

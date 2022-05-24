@@ -76,7 +76,7 @@ import { MultisigsClient } from './multisigs';
 import { PINClient } from './pin';
 import { SnapshotClient } from './snapshot';
 import { TransferClient } from './transfer';
-export { verifyPayment } from './transfer'
+export { verifyPayment } from './transfer';
 import { CollectiblesClient } from './collectibles';
 export {
   getMvmTransaction,
@@ -87,22 +87,23 @@ export {
   getContractByUserIDs,
   getAssetIDByAddress,
   getUserIDByAddress,
-} from './mvm'
+} from './mvm';
 
 export class Client
   implements
-  AddressClientRequest,
-  AppClientRequest,
-  AssetClientRequest,
-  AttachmentClientRequest,
-  CollectiblesClient,
-  ConversationClientRequest,
-  MessageClientRequest,
-  MultisigClientRequest,
-  PINClientRequest,
-  SnapshotClientRequest,
-  TransferClientRequest,
-  UserClientRequest {
+    AddressClientRequest,
+    AppClientRequest,
+    AssetClientRequest,
+    AttachmentClientRequest,
+    CollectiblesClient,
+    ConversationClientRequest,
+    MessageClientRequest,
+    MultisigClientRequest,
+    PINClientRequest,
+    SnapshotClientRequest,
+    TransferClientRequest,
+    UserClientRequest
+{
   request: AxiosInstance;
   keystore: Keystore;
 
@@ -113,10 +114,7 @@ export class Client
   }
 
   // Address...
-  createAddress!: (
-    params: AddressCreateParams,
-    pin?: string
-  ) => Promise<Address>;
+  createAddress!: (params: AddressCreateParams, pin?: string) => Promise<Address>;
   readAddress!: (address_id: string) => Promise<Address>;
   readAddresses!: (asset_id: string) => Promise<Address[]>;
   deleteAddress!: (address_id: string, pin?: string) => Promise<void>;
@@ -131,10 +129,7 @@ export class Client
   readAsset!: (asset_id: string) => Promise<Asset>;
   readAssets!: () => Promise<Asset[]>;
   readAssetFee!: (asset_id: string) => Promise<number>;
-  readAssetNetworkTicker!: (
-    asset_id: string,
-    offset?: string
-  ) => Promise<NetworkTicker>;
+  readAssetNetworkTicker!: (asset_id: string, offset?: string) => Promise<NetworkTicker>;
 
   readExchangeRates!: () => Promise<ExchangeRate[]>;
 
@@ -147,58 +142,23 @@ export class Client
   newMintCollectibleTransferInput!: (p: CollectiblesParams) => TransactionInput;
 
   readCollectibleToken!: (id: string) => Promise<CollectibleToken>;
-  readCollectibleOutputs!: (
-    members: string[],
-    threshold: number,
-    offset: string,
-    limit: number
-  ) => Promise<CollectibleOutput[]>;
-  makeCollectibleTransactionRaw!: (
-    txInput: RawCollectibleInput
-  ) => Promise<string>;
-  createCollectibleRequest!: (
-    action: CollectibleAction,
-    raw: string
-  ) => Promise<CollectibleRequest>;
-  signCollectibleRequest!: (
-    requestId: string,
-    pin?: string
-  ) => Promise<CollectibleRequest>;
+  readCollectibleOutputs!: (members: string[], threshold: number, offset: string, limit: number) => Promise<CollectibleOutput[]>;
+  makeCollectibleTransactionRaw!: (txInput: RawCollectibleInput) => Promise<string>;
+  createCollectibleRequest!: (action: CollectibleAction, raw: string) => Promise<CollectibleRequest>;
+  signCollectibleRequest!: (requestId: string, pin?: string) => Promise<CollectibleRequest>;
   cancelCollectibleRequest!: (requestId: string) => Promise<void>;
   unlockCollectibleRequest!: (requestId: string, pin?: string) => Promise<void>;
 
   // Conversation...
-  createConversation!: (
-    params: ConversationCreateParmas
-  ) => Promise<Conversation>;
-  updateConversation!: (
-    conversationID: string,
-    params: ConversationUpdateParams
-  ) => Promise<Conversation>;
+  createConversation!: (params: ConversationCreateParmas) => Promise<Conversation>;
+  updateConversation!: (conversationID: string, params: ConversationUpdateParams) => Promise<Conversation>;
   createContactConversation!: (userID: string) => Promise<Conversation>;
-  createGroupConversation!: (
-    conversationID: string,
-    name: string,
-    participant: Participant[]
-  ) => Promise<Conversation>;
+  createGroupConversation!: (conversationID: string, name: string, participant: Participant[]) => Promise<Conversation>;
   readConversation!: (conversationID: string) => Promise<Conversation>;
-  managerConversation!: (
-    conversationID: string,
-    action: ConversationAction,
-    participant: Participant[]
-  ) => Promise<Conversation>;
-  addParticipants!: (
-    conversationID: string,
-    userIDs: string[]
-  ) => Promise<Conversation>;
-  removeParticipants!: (
-    conversationID: string,
-    userIDs: string[]
-  ) => Promise<Conversation>;
-  adminParticipants!: (
-    conversationID: string,
-    userIDs: string[]
-  ) => Promise<Conversation>;
+  managerConversation!: (conversationID: string, action: ConversationAction, participant: Participant[]) => Promise<Conversation>;
+  addParticipants!: (conversationID: string, userIDs: string[]) => Promise<Conversation>;
+  removeParticipants!: (conversationID: string, userIDs: string[]) => Promise<Conversation>;
+  adminParticipants!: (conversationID: string, userIDs: string[]) => Promise<Conversation>;
   rotateConversation!: (conversationID: string) => Promise<Conversation>;
 
   // Message...
@@ -212,42 +172,19 @@ export class Client
   sendPostMsg!: (userID: string, text: string) => Promise<MessageView>;
   sendImageMsg!: (userID: string, image: ImageMessage) => Promise<MessageView>;
   sendDataMsg!: (userID: string, data: DataMessage) => Promise<MessageView>;
-  sendStickerMsg!: (
-    userID: string,
-    sticker: StickerMessage
-  ) => Promise<MessageView>;
-  sendContactMsg!: (
-    userID: string,
-    contact: ContactMesage
-  ) => Promise<MessageView>;
-  sendAppCardMsg!: (
-    userID: string,
-    appCard: AppCardMessage
-  ) => Promise<MessageView>;
+  sendStickerMsg!: (userID: string, sticker: StickerMessage) => Promise<MessageView>;
+  sendContactMsg!: (userID: string, contact: ContactMesage) => Promise<MessageView>;
+  sendAppCardMsg!: (userID: string, appCard: AppCardMessage) => Promise<MessageView>;
   sendAudioMsg!: (userID: string, audio: AudioMessage) => Promise<MessageView>;
   sendLiveMsg!: (userID: string, live: LiveMessage) => Promise<MessageView>;
   sendVideoMsg!: (userID: string, video: VideoMessage) => Promise<MessageView>;
-  sendLocationMsg!: (
-    userID: string,
-    location: LocationMessage
-  ) => Promise<MessageView>;
-  sendAppButtonMsg!: (
-    userID: string,
-    appButton: AppButtonMessage[]
-  ) => Promise<MessageView>;
-  sendRecallMsg!: (
-    userID: string,
-    message: RecallMessage
-  ) => Promise<MessageView>;
+  sendLocationMsg!: (userID: string, location: LocationMessage) => Promise<MessageView>;
+  sendAppButtonMsg!: (userID: string, appButton: AppButtonMessage[]) => Promise<MessageView>;
+  sendRecallMsg!: (userID: string, message: RecallMessage) => Promise<MessageView>;
 
   // Multisigs...
   readMultisigs!: (offset: string, limit: number) => Promise<MultisigUTXO[]>;
-  readMultisigOutputs!: (
-    members: string[],
-    threshold: number,
-    offset: string,
-    limit: number
-  ) => Promise<MultisigUTXO[]>;
+  readMultisigOutputs!: (members: string[], threshold: number, offset: string, limit: number) => Promise<MultisigUTXO[]>;
   createMultisig!: (action: string, raw: string) => Promise<MultisigRequest>;
   signMultisig!: (request_id: string, pin: string) => Promise<MultisigRequest>;
   cancelMultisig!: (request_id: string) => Promise<void>;
@@ -268,15 +205,10 @@ export class Client
   readNetworkSnapshot!: (snapshot_id: string) => Promise<Snapshot>;
 
   // Transfer...
-  verifyPayment!: (
-    params: TransferInput | TransactionInput
-  ) => Promise<Payment>;
+  verifyPayment!: (params: TransferInput | TransactionInput) => Promise<Payment>;
   transfer!: (params: TransferInput, pin?: string) => Promise<Snapshot>;
   readTransfer!: (trace_id: string) => Promise<Snapshot>;
-  transaction!: (
-    params: TransactionInput,
-    pin?: string
-  ) => Promise<RawTransaction>;
+  transaction!: (params: TransactionInput, pin?: string) => Promise<RawTransaction>;
   withdraw!: (params: WithdrawInput, pin?: string) => Promise<Snapshot>;
 
   // User...
@@ -291,14 +223,9 @@ export class Client
   readBlockUsers!: () => Promise<User[]>;
 
   // Oauth...
-  authorizeToken(
-    code: string,
-    client_secret?: string,
-    code_verifier?: string
-  ): Promise<{ access_token: string; scope: string }> {
+  authorizeToken(code: string, client_secret?: string, code_verifier?: string): Promise<{ access_token: string; scope: string }> {
     if (!client_secret) client_secret = this.keystore.client_secret;
-    if (!client_secret)
-      return Promise.reject(new Error('client_secret required'));
+    if (!client_secret) return Promise.reject(new Error('client_secret required'));
     return this.request.post('/oauth/token', {
       client_secret,
       code,
@@ -325,13 +252,8 @@ export class Client
     bytes[6] = (bytes[6] & 0x0f) | 0x30;
     bytes[8] = (bytes[8] & 0x3f) | 0x80;
 
-    const digest = Array.from(bytes, (byte) =>
-      `0${(byte & 0xff).toString(16)}`.slice(-2)
-    ).join('');
-    return `${digest.slice(0, 8)}-${digest.slice(8, 12)}-${digest.slice(
-      12,
-      16
-    )}-${digest.slice(16, 20)}-${digest.slice(20, 32)}`;
+    const digest = Array.from(bytes, byte => `0${(byte & 0xff).toString(16)}`.slice(-2)).join('');
+    return `${digest.slice(0, 8)}-${digest.slice(8, 12)}-${digest.slice(12, 16)}-${digest.slice(16, 20)}-${digest.slice(20, 32)}`;
   }
 }
 [
@@ -347,7 +269,7 @@ export class Client
   TransferClient,
   UserClient,
   CollectiblesClient,
-].forEach((client) => _extends(Client, client));
+].forEach(client => _extends(Client, client));
 
 function _extends(origin: any, target: any) {
   for (const key in target.prototype) {
@@ -355,12 +277,7 @@ function _extends(origin: any, target: any) {
   }
 }
 
-export const authorizeToken = (
-  client_id: string,
-  code: string,
-  client_secret: string,
-  code_verifier?: string
-): Promise<{ access_token: string; scope: string }> =>
+export const authorizeToken = (client_id: string, code: string, client_secret: string, code_verifier?: string): Promise<{ access_token: string; scope: string }> =>
   mixinRequest.post('/oauth/token', {
     client_id,
     code,

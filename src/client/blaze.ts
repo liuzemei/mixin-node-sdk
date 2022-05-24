@@ -53,15 +53,12 @@ export class BlazeClient extends Client {
       headers,
       handshakeTimeout: 3000,
     });
-    this.ws.onmessage = async (event) => {
+    this.ws.onmessage = async event => {
       let msg = await this.decode(event.data as Uint8Array);
       if (!msg) return;
-      if (msg.source === 'ACKNOWLEDGE_MESSAGE_RECEIPT' && this.h.onAckReceipt)
-        await this.h.onAckReceipt(msg);
-      else if (msg.category === 'SYSTEM_CONVERSATION' && this.h.onConversation)
-        await this.h.onConversation(msg);
-      else if (msg.category === 'SYSTEM_ACCOUNT_SNAPSHOT' && this.h.onTransfer)
-        await this.h.onTransfer(msg);
+      if (msg.source === 'ACKNOWLEDGE_MESSAGE_RECEIPT' && this.h.onAckReceipt) await this.h.onAckReceipt(msg);
+      else if (msg.category === 'SYSTEM_CONVERSATION' && this.h.onConversation) await this.h.onConversation(msg);
+      else if (msg.category === 'SYSTEM_ACCOUNT_SNAPSHOT' && this.h.onTransfer) await this.h.onTransfer(msg);
       else await this.h.onMessage(msg);
       if (this.options.syncAck) {
         await this.send_raw({
@@ -75,9 +72,8 @@ export class BlazeClient extends Client {
       clearInterval(this.pingInterval);
       this._loopBlaze();
     };
-    this.ws.onerror = (e) => {
-      e.message === 'Opening handshake has timed out' &&
-        (this.url = this.url === oneUrl ? zeromeshUrl : oneUrl);
+    this.ws.onerror = e => {
+      e.message === 'Opening handshake has timed out' && (this.url = this.url === oneUrl ? zeromeshUrl : oneUrl);
     };
     this.ws.onopen = () => {
       this.isAlive = true;
@@ -98,7 +94,7 @@ export class BlazeClient extends Client {
   }
 
   decode(data: Uint8Array): Promise<MessageView> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const t = ungzip(data, { to: 'string' });
       const msgObj = JSON.parse(t);
       if (this.options?.parse && msgObj.data && msgObj.data.data) {
@@ -112,7 +108,7 @@ export class BlazeClient extends Client {
   }
 
   send_raw(message: BlazeMessage) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const buffer = Buffer.from(JSON.stringify(message), 'utf-8');
       const zipped = gzip(buffer);
       if (this.ws!.readyState === WebSocket.OPEN) {

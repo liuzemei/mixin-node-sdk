@@ -10,17 +10,13 @@ export class AttachmentClient implements AttachmentClientRequest {
     return this.request.get(`/attachments/${attachment_id}`);
   }
   async uploadFile(file: File): Promise<Attachment> {
-    const { view_url, upload_url, attachment_id } =
-      await this.createAttachment();
+    const { view_url, upload_url, attachment_id } = await this.createAttachment();
     await uploadAttachmentTo(upload_url!, file);
     return { view_url, attachment_id };
   }
 }
 
-export async function uploadAttachmentTo(
-  uploadURL: string,
-  file: File
-): Promise<AxiosResponse> {
+export async function uploadAttachmentTo(uploadURL: string, file: File): Promise<AxiosResponse> {
   return axios.create()({
     url: uploadURL,
     method: 'PUT',
@@ -33,10 +29,7 @@ export async function uploadAttachmentTo(
   });
 }
 
-export function uploadAttachment(
-  attachment: Attachment,
-  file: File
-): Promise<AxiosResponse> {
+export function uploadAttachment(attachment: Attachment, file: File): Promise<AxiosResponse> {
   if (!attachment.upload_url) return Promise.reject(new Error('No upload URL'));
   return uploadAttachmentTo(attachment.upload_url!, file);
 }

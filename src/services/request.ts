@@ -25,8 +25,7 @@ export const request = (keystore?: Keystore, token = ''): AxiosInstance => {
     config.headers['x-request-id'] = requestID;
     let jwtToken = '';
     if (token) jwtToken = token;
-    else if (k)
-      jwtToken = k.signToken(signRequest(method!, uri, data), requestID);
+    else if (k) jwtToken = k.signToken(signRequest(method!, uri, data), requestID);
     config.headers.Authorization = 'Bearer ' + jwtToken;
     return config;
   });
@@ -42,12 +41,11 @@ export const request = (keystore?: Keystore, token = ''): AxiosInstance => {
     },
     async (e: any) => {
       if (['ETIMEDOUT', 'ECONNABORTED'].includes(e.code)) {
-        ins.defaults.baseURL = e.config.baseURL =
-          e.config.baseURL === hostURL[0] ? hostURL[1] : hostURL[0];
+        ins.defaults.baseURL = e.config.baseURL = e.config.baseURL === hostURL[0] ? hostURL[1] : hostURL[0];
       }
       await delay();
       return ins(e.config);
-    }
+    },
   );
   return ins;
 };

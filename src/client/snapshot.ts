@@ -19,14 +19,6 @@ export class SnapshotClient implements SnapshotClientRequest {
   }
 }
 
-export const readSnapshots = (
-  token: string,
-  params: SnapshotQuery
-): Promise<Snapshot[]> =>
-  request(undefined, token).get('/snapshots', { params });
+export const readSnapshots = (token: string, params: SnapshotQuery): Promise<Snapshot[]> => request(undefined, token).get('/snapshots', { params });
 
-export const readSnapshot = (
-  token: string,
-  snapshot_id: string
-): Promise<Snapshot> =>
-  request(undefined, token).get(`/snapshots/${snapshot_id}`);
+export const readSnapshot = (token: string, snapshot_id: string): Promise<Snapshot> => request(undefined, token).get(`/snapshots/${snapshot_id}`);

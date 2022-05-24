@@ -24,8 +24,7 @@ export class UserClient implements UserClientRequest {
     return this.request.get(`/search/${identityNumberOrPhone}`);
   }
   async createUser(full_name: string, session_secret?: string): Promise<User> {
-    if (session_secret)
-      return this.request.post(`/users`, { full_name, session_secret });
+    if (session_secret) return this.request.post(`/users`, { full_name, session_secret });
     const { publicKey, privateKey } = forge.pki.ed25519.generateKeyPair();
     const params = {
       full_name,
@@ -44,11 +43,8 @@ export class UserClient implements UserClientRequest {
   }
 }
 
-export const userMe = (token: string): Promise<User> =>
-  request(undefined, token).get('/me');
+export const userMe = (token: string): Promise<User> => request(undefined, token).get('/me');
 
-export const readFriends = (token: string): Promise<User[]> =>
-  request(undefined, token).get(`/friends`);
+export const readFriends = (token: string): Promise<User[]> => request(undefined, token).get(`/friends`);
 
-export const readBlockUsers = (token: string): Promise<User[]> =>
-  request(undefined, token).get(`/blocking_users`);
+export const readBlockUsers = (token: string): Promise<User[]> => request(undefined, token).get(`/blocking_users`);
