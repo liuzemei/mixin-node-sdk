@@ -86,14 +86,18 @@ export const paymentGenerateByInfo = async (params: PaymentGenerateParams): Prom
   const { process, delegatecall, uploadkey, address } = params.options;
   const res = await mvmClient.post('/payment', {
     extra,
-    process,
-    delegatecall,
-    uploadkey,
-    address,
-    type,
-    trace,
-    asset,
-    amount,
+    options: {
+      process,
+      delegatecall,
+      uploadkey,
+      address,
+    },
+    payment: {
+      type,
+      trace,
+      asset,
+      amount,
+    },
   });
   return res.data;
 };
