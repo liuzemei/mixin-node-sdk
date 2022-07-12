@@ -13,7 +13,7 @@ const OperationPurposeGroupEvent = 1;
 // const OperationPurposeCreditProcess = 12
 
 const mvmClient = axios.create({
-  baseURL: 'https://mvm-api.test.mixinbots.com',
+  baseURL: 'https://mvm-api.test.mixinbots.com'
 });
 
 const receivers = ['a15e0b6d-76ed-4443-b83f-ade9eca2681a', 'b9126674-b07d-49b6-bf4f-48d965b2242b', '15141fe4-1cfd-40f8-9819-71e453054639', '3e72ca0c-1bab-49ad-aa0a-4d8471d375e7'];
@@ -27,7 +27,7 @@ export const getMvmTransaction = (params: InvokeCodeParams): TransactionInput =>
     amount: params.amount,
     trace_id: params.trace || newUUID(),
     opponent_multisig: { receivers, threshold },
-    memo: encodeMemo(params.extra, params.process || registryProcess),
+    memo: encodeMemo(params.extra, params.process || registryProcess)
   };
 };
 
@@ -40,7 +40,8 @@ export const abiParamsGenerator = (contractAddress: string, abi: JsonFragment[])
       const types = item.inputs?.map(v => v.type!) || [];
       const methodID = getMethodIdByAbi(item.name!, types);
       res[item.name!] = function () {
-        let values = Array.from(arguments);
+        // eslint-disable-next-line prefer-rest-params
+        const values = Array.from(arguments);
         const options = values.length === types.length + 1 ? values.pop() : {};
         return extraGenerateByInfo({ contractAddress, methodID, types, values, options });
       };
@@ -51,6 +52,7 @@ export const abiParamsGenerator = (contractAddress: string, abi: JsonFragment[])
 
 // 根据调用信息获取 extra
 export const extraGenerateByInfo = async (params: ExtraGenerateParams): Promise<string> => {
+  // eslint-disable-next-line prefer-const
   let { contractAddress, methodID, methodName, types = [], values = [], options = {} } = params;
   if (!contractAddress) return Promise.reject('contractAddress is required');
   if (contractAddress.startsWith('0x')) contractAddress = contractAddress.slice(2);
@@ -64,7 +66,7 @@ export const extraGenerateByInfo = async (params: ExtraGenerateParams): Promise<
     extra += abiCoder.encode(types, values).slice(2);
   }
   if (ignoreUpload) return extra;
-  let opcode: number = 0;
+  let opcode = 0;
   if (encodeMemo(extra, process).length > 200) {
     if (!uploadkey) return Promise.reject('please provide key to generate extra(length > 200)');
     const raw = '0x' + extra;
@@ -90,14 +92,14 @@ export const paymentGenerateByInfo = async (params: PaymentGenerateParams): Prom
       process,
       delegatecall,
       uploadkey,
-      address,
+      address
     },
     payment: {
       type,
       trace,
       asset,
-      amount,
-    },
+      amount
+    }
   });
   return res.data;
 };

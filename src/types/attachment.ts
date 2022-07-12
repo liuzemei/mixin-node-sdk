@@ -5,12 +5,12 @@ export interface Attachment {
 }
 
 export interface AttachmentClientRequest {
-  createAttachment(): Promise<Attachment>;
-  showAttachment(attachment_id: string): Promise<Attachment>;
-  uploadFile(file: File): Promise<Attachment>;
+  createAttachment: () => Promise<Attachment>;
+  showAttachment: (attachment_id: string) => Promise<Attachment>;
+  uploadFile: (file: File) => Promise<Attachment>;
 }
 
 export interface AttachmentRequest {
-  uploadAttachmentTo(uploadURL: string, file: File): Promise<void>;
-  uploadAttachment(): Promise<void>;
+  uploadAttachmentTo: (uploadURL: string, file: File) => Promise<void>;
+  uploadAttachment: () => Promise<void>;
 }

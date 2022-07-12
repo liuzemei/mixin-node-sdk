@@ -31,14 +31,16 @@ const GroupMembers = [
   '50115496-7247-4e2c-857b-ec8680756bee',
 ];
 const GroupThreshold = 5;
+
 export class CollectiblesClient implements CollectiblesClientRequest {
   keystore!: Keystore;
   request!: AxiosInstance;
   batchReadGhostKeys!: (inputs: GhostInput[]) => Promise<GhostKeys[]>;
+
   newMintCollectibleTransferInput(p: CollectiblesParams): TransactionInput {
     const { trace_id, collection_id, token_id, content } = p;
     if (!trace_id || !collection_id || !token_id || !content) throw new Error('Missing parameters');
-    let input: TransactionInput = {
+    const input: TransactionInput = {
       asset_id: MintAssetID,
       amount: MintMinimumCost,
       trace_id,
@@ -50,15 +52,18 @@ export class CollectiblesClient implements CollectiblesClientRequest {
     };
     return input;
   }
+
   readCollectibleToken(id: string): Promise<CollectibleToken> {
     return this.request.get(`/collectibles/tokens/` + id);
   }
+
   readCollectibleOutputs(_members: string[], threshold: number, offset: string, limit: number): Promise<CollectibleOutput[]> {
     const members = hashMember(_members);
     return this.request.get(`/collectibles/outputs`, {
       params: { members, threshold, offset, limit },
     });
   }
+
   async makeCollectibleTransactionRaw(txInput: RawCollectibleInput): Promise<string> {
     const { token, output, receivers, threshold } = txInput;
     const tx: Transaction = {
@@ -82,18 +87,22 @@ export class CollectiblesClient implements CollectiblesClientRequest {
     tx.outputs = [DumpOutputFromGhostKey(ghostInputs[0], output.amount!, threshold)];
     return dumpTransaction(tx);
   }
+
   createCollectibleRequest(action: CollectibleAction, raw: string): Promise<CollectibleRequest> {
     return this.request.post(`/collectibles/requests`, { action, raw });
   }
+
   signCollectibleRequest(requestId: string, pin?: string): Promise<CollectibleRequest> {
     pin = getSignPIN(this.keystore, pin);
     return this.request.post(`/collectibles/requests/${requestId}/sign`, {
       pin,
     });
   }
+
   cancelCollectibleRequest(requestId: string): Promise<void> {
     return this.request.post(`/collectibles/requests/${requestId}/cancel`);
   }
+
   unlockCollectibleRequest(requestId: string, pin?: string): Promise<void> {
     pin = getSignPIN(this.keystore, pin);
     return this.request.post(`/collectibles/requests/${requestId}/unlock`, {

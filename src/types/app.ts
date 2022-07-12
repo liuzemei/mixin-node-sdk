@@ -33,8 +33,8 @@ export interface UpdateAppRequest {
 }
 
 export interface AppClientRequest {
-  updateApp(appID: string, params: UpdateAppRequest): Promise<App>;
-  readFavoriteApps(userID: string): Promise<FavoriteApp[]>;
-  favoriteApp(appID: string): Promise<FavoriteApp>;
-  unfavoriteApp(appID: string): Promise<void>;
+  updateApp: (appID: string, params: UpdateAppRequest) => Promise<App>;
+  readFavoriteApps: (userID: string) => Promise<FavoriteApp[]>;
+  favoriteApp: (appID: string) => Promise<FavoriteApp>;
+  unfavoriteApp: (appID: string) => Promise<void>;
 }

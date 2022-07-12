@@ -54,7 +54,7 @@ export class BlazeClient extends Client {
       handshakeTimeout: 3000,
     });
     this.ws.onmessage = async event => {
-      let msg = await this.decode(event.data as Uint8Array);
+      const msg = await this.decode(event.data as Uint8Array);
       if (!msg) return;
       if (msg.source === 'ACKNOWLEDGE_MESSAGE_RECEIPT' && this.h.onAckReceipt) await this.h.onAckReceipt(msg);
       else if (msg.category === 'SYSTEM_CONVERSATION' && this.h.onConversation) await this.h.onConversation(msg);
@@ -101,7 +101,9 @@ export class BlazeClient extends Client {
         msgObj.data.data = Buffer.from(msgObj.data.data, 'base64').toString();
         try {
           msgObj.data.data = JSON.parse(msgObj.data.data);
-        } catch (e) {}
+        } catch (e) {
+          console.log('blaze decode error....', e);
+        }
       }
       resolve(msgObj.data);
     });

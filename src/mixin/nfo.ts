@@ -2,6 +2,7 @@ import { parse as UUIDParse } from 'uuid';
 import { newHash } from './tools';
 import { Encoder } from './encoder';
 import { base64url } from './sign';
+
 const Prefix = 'NFO';
 const Version = 0x00;
 

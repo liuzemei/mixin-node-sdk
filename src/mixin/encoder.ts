@@ -1,6 +1,7 @@
 import { Aggregated, Input, Output } from '../types';
 import { BN } from 'bn.js';
 import { parse } from 'uuid';
+
 const aggregatedSignaturePrefix = 0xff01;
 const empty = Buffer.from([0x00, 0x00]);
 
@@ -14,9 +15,11 @@ export const OperatorCmp = 0xff;
 
 export class Encoder {
   buf: Buffer;
+
   constructor(buf: Buffer) {
     this.buf = buf;
   }
+
   write(buf: Buffer) {
     this.buf = Buffer.concat([this.buf, buf]);
   }
@@ -35,19 +38,19 @@ export class Encoder {
     if (i > maxEcodingInt) {
       throw new Error('int overflow');
     }
-    let buf = Buffer.alloc(2);
+    const buf = Buffer.alloc(2);
     buf.writeUInt16BE(i);
     this.write(buf);
   }
 
   wirteUint64(i: bigint) {
-    let buf = Buffer.alloc(8);
+    const buf = Buffer.alloc(8);
     buf.writeBigUInt64BE(i);
     this.write(buf);
   }
 
   wirteUint16(i: number) {
-    let buf = Buffer.alloc(2);
+    const buf = Buffer.alloc(2);
     buf.writeUInt16BE(i);
     this.write(buf);
   }
@@ -77,7 +80,7 @@ export class Encoder {
     if (!i.genesis) i.genesis = '';
     this.writeInt(i.genesis.length);
     this.write(Buffer.from(i.genesis));
-    let d = i.deposit;
+    const d = i.deposit;
     if (typeof d === 'undefined') {
       this.write(empty);
     } else {
@@ -96,7 +99,7 @@ export class Encoder {
       this.wirteUint64(d.index);
       this.writeInteger(d.amount);
     }
-    let m = i.mint;
+    const m = i.mint;
     if (typeof m === 'undefined') {
       this.write(empty);
     } else {
@@ -147,6 +150,7 @@ export class Encoder {
       this.write(tag);
     }
   }
+
   encodeAggregatedSignature(js: Aggregated) {
     this.writeInt(maxEcodingInt);
     this.writeInt(aggregatedSignaturePrefix);
@@ -198,11 +202,11 @@ export class Encoder {
 }
 
 function getIntBytes(x: number) {
-  var bytes = [];
+  const bytes = [];
   do {
     if (x === 0) break;
     bytes.unshift(x & 255);
     x = (x / 2 ** 8) | 0;
-  } while (1);
+  } while (true);
   return bytes;
 }

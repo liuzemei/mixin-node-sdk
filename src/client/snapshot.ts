@@ -8,12 +8,15 @@ export class SnapshotClient implements SnapshotClientRequest {
   readSnapshots(params: SnapshotQuery): Promise<Snapshot[]> {
     return this.request.get(`/snapshots`, { params });
   }
+
   readNetworkSnapshots(params: SnapshotQuery): Promise<Snapshot[]> {
     return this.request.get(`/network/snapshots`, { params });
   }
+
   readSnapshot(snapshot_id: string): Promise<Snapshot> {
     return this.request.get(`/snapshots/${snapshot_id}`);
   }
+
   readNetworkSnapshot(snapshot_id: string): Promise<Snapshot> {
     return this.request.get(`/network/snapshots/${snapshot_id}`);
   }

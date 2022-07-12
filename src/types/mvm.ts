@@ -40,8 +40,8 @@ export interface PaymentGenerateParams extends ExtraGenerateParams {
 }
 
 export interface MvmClientRequest {
-  getMvmTransaction(params: InvokeCodeParams): TransactionInput;
-  abiParamsGenerator(contractAddress: string, abi: JsonFragment[]): { [method: string]: Function };
-  extraGenerateByInfo(params: ExtraGenerateParams): Promise<string>;
-  paymentGenerateByInfo(params: PaymentGenerateParams): Promise<Payment | TransactionInput>;
+  getMvmTransaction: (params: InvokeCodeParams) => Promise<TransactionInput>;
+  abiParamsGenerator: (contractAddress: string, abi: JsonFragment[]) => { [method: string]: Function };
+  extraGenerateByInfo: (params: ExtraGenerateParams) => Promise<string>;
+  paymentGenerateByInfo: (params: PaymentGenerateParams) => Promise<Payment | TransactionInput>;
 }

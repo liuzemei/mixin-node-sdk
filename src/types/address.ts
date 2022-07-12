@@ -18,13 +18,13 @@ export interface AddressCreateParams {
 }
 
 export interface AddressClientRequest {
-  createAddress(params: AddressCreateParams, pin?: string): Promise<Address>;
-  readAddress(address_id: string): Promise<Address>;
-  readAddresses(asset_id: string): Promise<Address[]>;
-  deleteAddress(address_id: string, pin?: string): Promise<void>;
+  createAddress: (params: AddressCreateParams, pin?: string) => Promise<Address>;
+  readAddress: (address_id: string) => Promise<Address>;
+  readAddresses: (asset_id: string) => Promise<Address[]>;
+  deleteAddress: (address_id: string, pin?: string) => Promise<void>;
 }
 
 export interface AddressRequest {
-  readAddress(token: string, address_id: string): Promise<Address>;
-  readAddresses(token: string, asset_id: string): Promise<Address[]>;
+  readAddress: (token: string, address_id: string) => Promise<Address>;
+  readAddresses: (token: string, asset_id: string) => Promise<Address[]>;
 }

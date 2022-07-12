@@ -1,4 +1,5 @@
 import { Asset } from './asset';
+
 export interface Snapshot {
   type: string;
   snapshot_id: string;
@@ -35,13 +36,13 @@ export interface SnapshotQuery {
 }
 
 export interface SnapshotClientRequest {
-  readSnapshots(params?: SnapshotQuery): Promise<Snapshot[]>;
-  readNetworkSnapshots(params?: SnapshotQuery): Promise<Snapshot[]>;
-  readSnapshot(snapshot_id: string): Promise<Snapshot>;
-  readNetworkSnapshot(snapshot_id: string): Promise<Snapshot>;
+  readSnapshots: (params?: SnapshotQuery) => Promise<Snapshot[]>;
+  readNetworkSnapshots: (params?: SnapshotQuery) => Promise<Snapshot[]>;
+  readSnapshot: (snapshot_id: string) => Promise<Snapshot>;
+  readNetworkSnapshot: (snapshot_id: string) => Promise<Snapshot>;
 }
 
 export interface SnapshotRequest {
-  ReadSnapshots(token: string, params?: SnapshotQuery): Promise<Snapshot[]>;
-  ReadSnapshot(token: string, snapshot_id: string): Promise<Snapshot>;
+  ReadSnapshots: (token: string, params?: SnapshotQuery) => Promise<Snapshot[]>;
+  ReadSnapshot: (token: string, snapshot_id: string) => Promise<Snapshot>;
 }

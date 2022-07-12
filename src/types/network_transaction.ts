@@ -42,6 +42,7 @@ export interface Aggregated {
   signers: number[];
   signature: string;
 }
+
 export interface Transaction {
   hash?: string;
   snapshot?: string;

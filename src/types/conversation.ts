@@ -36,14 +36,14 @@ export interface ConversationUpdateParams {
 }
 
 export interface ConversationClientRequest {
-  createConversation(params: ConversationCreateParmas): Promise<Conversation>;
-  updateConversation(conversationID: string, params: ConversationUpdateParams): Promise<Conversation>;
-  createContactConversation(userID: string): Promise<Conversation>;
-  createGroupConversation(conversationID: string, name: string, participant: Participant[]): Promise<Conversation>;
-  readConversation(conversationID: string): Promise<Conversation>;
-  managerConversation(conversationID: string, action: ConversationAction, participant: Participant[]): Promise<Conversation>;
-  addParticipants(conversationID: string, userIDs: string[]): Promise<Conversation>;
-  removeParticipants(conversationID: string, userIDs: string[]): Promise<Conversation>;
-  adminParticipants(conversationID: string, userIDs: string[]): Promise<Conversation>;
-  rotateConversation(conversationID: string): Promise<Conversation>;
+  createConversation: (params: ConversationCreateParmas) => Promise<Conversation>;
+  updateConversation: (conversationID: string, params: ConversationUpdateParams) => Promise<Conversation>;
+  createContactConversation: (userID: string) => Promise<Conversation>;
+  createGroupConversation: (conversationID: string, name: string, participant: Participant[]) => Promise<Conversation>;
+  readConversation: (conversationID: string) => Promise<Conversation>;
+  managerConversation: (conversationID: string, action: ConversationAction, participant: Participant[]) => Promise<Conversation>;
+  addParticipants: (conversationID: string, userIDs: string[]) => Promise<Conversation>;
+  removeParticipants: (conversationID: string, userIDs: string[]) => Promise<Conversation>;
+  adminParticipants: (conversationID: string, userIDs: string[]) => Promise<Conversation>;
+  rotateConversation: (conversationID: string) => Promise<Conversation>;
 }

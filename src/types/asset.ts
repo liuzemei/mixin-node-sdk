@@ -33,22 +33,21 @@ export interface NetworkTicker {
 }
 
 export interface AssetClientRequest {
-  readAsset(asset_id: string): Promise<Asset>;
-  readAssets(): Promise<Asset[]>;
-  readAssetFee(asset_id: string): Promise<number>;
-  readAssetNetworkTicker(asset_id: string, offset?: string): Promise<NetworkTicker>;
-  readExchangeRates(): Promise<ExchangeRate[]>;
+  readAsset: (asset_id: string) => Promise<Asset>;
+  readAssets: () => Promise<Asset[]>;
+  readAssetFee: (asset_id: string) => Promise<number>;
+  readAssetNetworkTicker: (asset_id: string, offset?: string) => Promise<NetworkTicker>;
+  readExchangeRates: () => Promise<ExchangeRate[]>;
 }
 
 export interface AssetRequest {
-  readAsset(asset_id: string): Promise<Asset>;
-  readAssets(): Promise<Asset[]>;
-  readAssetFee(asset_id: string): Promise<number>;
-
-  ReadExchangeRates(): Promise<ExchangeRate[]>;
+  readAsset: (asset_id: string) => Promise<Asset>;
+  readAssets: () => Promise<Asset[]>;
+  readAssetFee: (asset_id: string) => Promise<number>;
+  ReadExchangeRates: () => Promise<ExchangeRate[]>;
 }
 
 export interface AssetClient {
-  readAsset(token: string, asset_id: string): Promise<Asset>;
-  readAssets(token: string): Promise<Asset[]>;
+  readAsset: (token: string, asset_id: string) => Promise<Asset>;
+  readAssets: (token: string) => Promise<Asset[]>;
 }

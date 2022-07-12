@@ -1,4 +1,5 @@
 import { App } from './app';
+
 export interface User {
   type: 'user';
   user_id: string;
@@ -30,18 +31,19 @@ export interface User {
 }
 
 export interface UserClientRequest {
-  userMe(): Promise<User>;
-  readUser(userIdOrIdentityNumber: string): Promise<User>;
-  readBlockUsers(): Promise<User[]>;
-  readUsers(userIDs: string[]): Promise<User[]>;
-  searchUser(identityNumberOrPhone: string): Promise<User>;
-  readFriends(): Promise<User[]>;
-  createUser(full_name: string, session_secret?: string): Promise<User>;
-  modifyProfile(full_name: string, avatar_base64: string): Promise<User>;
-  modifyRelationships(relationship: UserRelationship): Promise<User>;
+  userMe: () => Promise<User>;
+  readUser: (userIdOrIdentityNumber: string) => Promise<User>;
+  readBlockUsers: () => Promise<User[]>;
+  readUsers: (userIDs: string[]) => Promise<User[]>;
+  searchUser: (identityNumberOrPhone: string) => Promise<User>;
+  readFriends: () => Promise<User[]>;
+  createUser: (full_name: string, session_secret?: string) => Promise<User>;
+  modifyProfile: (full_name: string, avatar_base64: string) => Promise<User>;
+  modifyRelationships: (relationship: UserRelationship) => Promise<User>;
 }
 
 export type operation = 'ADD' | 'REMOVE' | 'BLOCK' | 'UNBLOCK';
+
 export interface UserRelationship {
   user_id: string;
   action: operation;

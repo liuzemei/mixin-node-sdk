@@ -10,9 +10,11 @@ export class ConversationClient implements ConversationClientRequest {
   createConversation(params: ConversationCreateParmas): Promise<Conversation> {
     return this.request.post('/conversations', params);
   }
+
   updateConversation(conversationID: string, params: ConversationUpdateParams): Promise<Conversation> {
     return this.request.put(`/conversations/${conversationID}`, params);
   }
+
   createContactConversation(userID: string): Promise<Conversation> {
     return this.createConversation({
       category: 'CONTACT',
@@ -20,6 +22,7 @@ export class ConversationClient implements ConversationClientRequest {
       participants: [{ user_id: userID }],
     });
   }
+
   createGroupConversation(conversationID: string, name: string, participant: Participant[]): Promise<Conversation> {
     return this.createConversation({
       category: 'GROUP',
@@ -28,24 +31,29 @@ export class ConversationClient implements ConversationClientRequest {
       participants: participant,
     });
   }
+
   readConversation(conversationID: string): Promise<Conversation> {
     return this.request.get(`/conversations/${conversationID}`);
   }
+
   managerConversation(conversationID: string, action: ConversationAction, participant: Participant[]): Promise<Conversation> {
     return this.request.post(`/conversations/${conversationID}/participants/${action}`, participant);
   }
+
   addParticipants(conversationID: string, userIDs: string[]): Promise<Conversation> {
     var participants: Participant[] = userIDs.map(userID => ({
       user_id: userID,
     }));
     return this.managerConversation(conversationID, 'ADD', participants);
   }
+
   removeParticipants(conversationID: string, userIDs: string[]): Promise<Conversation> {
     var participants: Participant[] = userIDs.map(userID => ({
       user_id: userID,
     }));
     return this.managerConversation(conversationID, 'REMOVE', participants);
   }
+
   adminParticipants(conversationID: string, userIDs: string[]): Promise<Conversation> {
     var participants: Participant[] = userIDs.map(userID => ({
       user_id: userID,
@@ -53,6 +61,7 @@ export class ConversationClient implements ConversationClientRequest {
     }));
     return this.managerConversation(conversationID, 'ROLE', participants);
   }
+
   rotateConversation(conversationID: string): Promise<Conversation> {
     return this.request.post(`/conversations/${conversationID}/rotate`);
   }

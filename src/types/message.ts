@@ -113,25 +113,25 @@ export interface AcknowledgementRequest {
 }
 
 export interface MessageClientRequest {
-  sendAcknowledgements(messages: AcknowledgementRequest[]): Promise<void>;
-  sendAcknowledgement(message: AcknowledgementRequest): Promise<void>;
-  sendMessage(message: MessageRequest): Promise<MessageView>;
-  sendMessages(messages: MessageRequest[]): Promise<undefined>;
+  sendAcknowledgements: (messages: AcknowledgementRequest[]) => Promise<void>;
+  sendAcknowledgement: (message: AcknowledgementRequest) => Promise<void>;
+  sendMessage: (message: MessageRequest) => Promise<MessageView>;
+  sendMessages: (messages: MessageRequest[]) => Promise<undefined>;
 
-  sendMessageText(userID: string, text: string): Promise<MessageView>;
-  sendMessagePost(userID: string, text: string): Promise<MessageView>;
+  sendMessageText: (userID: string, text: string) => Promise<MessageView>;
+  sendMessagePost: (userID: string, text: string) => Promise<MessageView>;
 
-  sendTextMsg(userID: string, text: string): Promise<MessageView>;
-  sendPostMsg(userID: string, text: string): Promise<MessageView>;
-  sendImageMsg(userID: string, image: ImageMessage): Promise<MessageView>;
-  sendDataMsg(userID: string, data: DataMessage): Promise<MessageView>;
-  sendStickerMsg(userID: string, sticker: StickerMessage): Promise<MessageView>;
-  sendContactMsg(userID: string, contact: ContactMesage): Promise<MessageView>;
-  sendAppCardMsg(userID: string, appCard: AppCardMessage): Promise<MessageView>;
-  sendAudioMsg(userID: string, audio: AudioMessage): Promise<MessageView>;
-  sendLiveMsg(userID: string, live: LiveMessage): Promise<MessageView>;
-  sendVideoMsg(userID: string, video: VideoMessage): Promise<MessageView>;
-  sendLocationMsg(userID: string, location: LocationMessage): Promise<MessageView>;
-  sendAppButtonMsg(userID: string, appButton: AppButtonMessage[]): Promise<MessageView>;
-  sendRecallMsg(userID: string, message: RecallMessage): Promise<MessageView>;
+  sendTextMsg: (userID: string, text: string) => Promise<MessageView>;
+  sendPostMsg: (userID: string, text: string) => Promise<MessageView>;
+  sendImageMsg: (userID: string, image: ImageMessage) => Promise<MessageView>;
+  sendDataMsg: (userID: string, data: DataMessage) => Promise<MessageView>;
+  sendStickerMsg: (userID: string, sticker: StickerMessage) => Promise<MessageView>;
+  sendContactMsg: (userID: string, contact: ContactMesage) => Promise<MessageView>;
+  sendAppCardMsg: (userID: string, appCard: AppCardMessage) => Promise<MessageView>;
+  sendAudioMsg: (userID: string, audio: AudioMessage) => Promise<MessageView>;
+  sendLiveMsg: (userID: string, live: LiveMessage) => Promise<MessageView>;
+  sendVideoMsg: (userID: string, video: VideoMessage) => Promise<MessageView>;
+  sendLocationMsg: (userID: string, location: LocationMessage) => Promise<MessageView>;
+  sendAppButtonMsg: (userID: string, appButton: AppButtonMessage[]) => Promise<MessageView>;
+  sendRecallMsg: (userID: string, message: RecallMessage) => Promise<MessageView>;
 }

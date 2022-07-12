@@ -5,7 +5,7 @@ export interface Turn {
 }
 
 export interface PINClientRequest {
-  verifyPin(pin: string): Promise<void>;
-  modifyPin(pin: string, newPin: string): Promise<void>;
-  readTurnServers(): Promise<Turn[]>;
+  verifyPin: (pin: string) => Promise<void>;
+  modifyPin: (pin: string, newPin: string) => Promise<void>;
+  readTurnServers: () => Promise<Turn[]>;
 }

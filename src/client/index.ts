@@ -76,8 +76,10 @@ import { MultisigsClient } from './multisigs';
 import { PINClient } from './pin';
 import { SnapshotClient } from './snapshot';
 import { TransferClient } from './transfer';
+
 export { verifyPayment } from './transfer';
 import { CollectiblesClient } from './collectibles';
+
 export {
   getMvmTransaction,
   abiParamsGenerator,
@@ -90,8 +92,7 @@ export {
 } from './mvm';
 
 export class Client
-  implements
-    AddressClientRequest,
+  implements AddressClientRequest,
     AppClientRequest,
     AssetClientRequest,
     AttachmentClientRequest,
@@ -102,8 +103,7 @@ export class Client
     PINClientRequest,
     SnapshotClientRequest,
     TransferClientRequest,
-    UserClientRequest
-{
+    UserClientRequest {
   request: AxiosInstance;
   keystore: Keystore;
 
@@ -256,6 +256,7 @@ export class Client
     return `${digest.slice(0, 8)}-${digest.slice(8, 12)}-${digest.slice(12, 16)}-${digest.slice(16, 20)}-${digest.slice(20, 32)}`;
   }
 }
+
 [
   AddressClient,
   AppClient,

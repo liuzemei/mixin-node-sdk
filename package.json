@@ -1,6 +1,6 @@
 {
   "name": "mixin-node-sdk",
-  "version": "3.0.32",
+  "version": "3.0.33",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MixinNetwork/bot-api-nodejs-client.git"
+    "url": "git+https://github.com/liuzemei/bot-api-nodejs-client.git"
   },
   "bugs": {
-    "url": "https://github.com/MixinNetwork/bot-api-nodejs-client/issues"
+    "url": "https://github.com/liuzemei/bot-api-nodejs-client/issues"
   },
-  "homepage": "https://github.com/MixinNetwork/bot-api-nodejs-client#readme",
+  "homepage": "https://github.com/liuzemei/bot-api-nodejs-client#readme",
   "keywords": [
     "mixin",
     "node",

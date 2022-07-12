@@ -3,12 +3,15 @@ import { Attachment, AttachmentClientRequest } from '../types/attachment';
 
 export class AttachmentClient implements AttachmentClientRequest {
   request!: AxiosInstance;
+
   createAttachment(): Promise<Attachment> {
     return this.request.post(`/attachments`);
   }
+
   showAttachment(attachment_id: string): Promise<Attachment> {
     return this.request.get(`/attachments/${attachment_id}`);
   }
+
   async uploadFile(file: File): Promise<Attachment> {
     const { view_url, upload_url, attachment_id } = await this.createAttachment();
     await uploadAttachmentTo(upload_url!, file);

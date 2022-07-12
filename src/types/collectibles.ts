@@ -53,6 +53,7 @@ export interface CollectibleTokenMeta {
   mime?: string;
   hash?: string;
 }
+
 export interface CollectibleToken {
   type?: string;
   created_at?: string;
@@ -70,6 +71,7 @@ export interface CollectiblesParams {
   token_id: string;
   content: string;
 }
+
 export interface RawCollectibleInput {
   output: CollectibleOutput;
   token: CollectibleToken;

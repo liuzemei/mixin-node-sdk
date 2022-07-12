@@ -2,7 +2,7 @@ import { GhostKeys, Transaction } from '../types';
 import { Encoder, magic, maxEcodingInt, OperatorCmp, OperatorSum } from './encoder';
 
 export function dumpTransaction(signed: Transaction): string {
-  let enc = new Encoder(magic);
+  const enc = new Encoder(magic);
   enc.write(Buffer.from([0x00, signed.version!]));
   enc.write(Buffer.from(signed.asset, 'hex'));
 

@@ -32,7 +32,7 @@ export const request = (keystore?: Keystore, token = ''): AxiosInstance => {
 
   ins.interceptors.response.use(
     (res: AxiosResponse) => {
-      let { data, error } = res.data;
+      const { data, error } = res.data;
       if (error) {
         error.request_id = res.headers['x-request-id'];
         return error;

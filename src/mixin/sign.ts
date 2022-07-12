@@ -60,6 +60,7 @@ export const signRequest = (method: string, url: string, body: object | string =
     .digest()
     .toHex();
 };
+
 function signEncryptEd25519PIN(pinToken: any, privateKey: string) {
   pinToken = Buffer.from(pinToken, 'base64');
   return scalarMult(privateKeyToCurve25519(privateKey), pinToken.slice(0, 32));
@@ -68,7 +69,7 @@ function signEncryptEd25519PIN(pinToken: any, privateKey: string) {
 function signPin(pin_token: any, private_key: any, session_id: any) {
   pin_token = Buffer.from(pin_token, 'base64');
   private_key = pki.privateKeyFromPem(private_key);
-  let pinKey = private_key.decrypt(pin_token, 'RSA-OAEP', {
+  const pinKey = private_key.decrypt(pin_token, 'RSA-OAEP', {
     md: md.sha256.create(),
     label: session_id,
   });
@@ -100,7 +101,7 @@ function privateKeyToCurve25519(privateKey: any) {
   const seed = privateKey.slice(0, 32);
   const sha512 = createHash('sha512');
   sha512.write(seed, 'binary');
-  let digest = sha512.digest();
+  const digest = sha512.digest();
   digest[0] &= 248;
   digest[31] &= 127;
   digest[31] |= 64;
