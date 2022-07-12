@@ -1,6 +1,10 @@
-export const registryAddress = '0x65ccF8d1B92AfC6aF2915Cb61e72d93ACdD16556';
+export const mvmRPCUri = 'https://geth.mvm.dev';
 
-export const registryProcess = '86c58765-ec81-3ca4-a35b-875f35a0ad7d';
+export const registryAddress = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
+
+export const registryProcess = 'bd670872-76ce-3263-b933-3aa337e212a4';
+
+export const storageAddress = '0xef241988D19892fE4efF4935256087F4fdc5ecAa';
 
 export const registryAbi = [
   {
@@ -141,6 +145,19 @@ export const registryAbi = [
   },
   {
     inputs: [],
+    name: 'HALTED',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'INBOUND',
     outputs: [
       {
@@ -194,6 +211,25 @@ export const registryAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'addresses',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '',
         type: 'address',
@@ -205,6 +241,25 @@ export const registryAbi = [
         internalType: 'uint128',
         name: '',
         type: 'uint128',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint128',
+        name: '',
+        type: 'uint128',
+      },
+    ],
+    name: 'balances',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -280,6 +335,51 @@ export const registryAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'deposits',
+    outputs: [
+      {
+        internalType: 'uint128',
+        name: '',
+        type: 'uint128',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes',
+        name: 'raw',
+        type: 'bytes',
+      },
+    ],
+    name: 'evolve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes',
+        name: 'raw',
+        type: 'bytes',
+      },
+    ],
+    name: 'halt',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'bytes',
         name: 'raw',
         type: 'bytes',
@@ -331,28 +431,14 @@ export const registryAbi = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
+        internalType: 'address',
+        name: '_storageContract',
+        type: 'address',
       },
-    ],
-    name: 'values',
-    outputs: [
       {
-        internalType: 'bytes',
-        name: '',
-        type: 'bytes',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
+        internalType: 'bytes32',
         name: '_key',
-        type: 'uint256',
+        type: 'bytes32',
       },
       {
         internalType: 'bytes',

@@ -1,124 +1,47 @@
-import { TransactionInput, InvokeCodeParams, ExtraGenerateParams, Payment, PaymentGenerateParams } from '../types';
-import { v4 as newUUID, parse, stringify } from 'uuid';
+import { TransactionInput, ContractParams, PaymentGenerateParams, MvmClientRequest, Payment, TransferInput } from '../types';
+import { parse, stringify } from 'uuid';
 import { Encoder } from '../mixin/encoder';
 import { base64url } from '../mixin/sign';
 import { BigNumber, ethers, utils } from 'ethers';
-import { JsonFragment } from '@ethersproject/abi';
-import { registryAbi, registryAddress, registryProcess } from '../mixin/mvm_registry';
-import axios from 'axios';
+import { mvmRPCUri, registryAddress, registryProcess, registryAbi } from '../mixin/mvm';
+// import axios from 'axios';
 
 // const OperationPurposeUnknown = 0
 const OperationPurposeGroupEvent = 1;
 // const OperationPurposeAddProcess = 11
 // const OperationPurposeCreditProcess = 12
 
-const mvmClient = axios.create({
-  baseURL: 'https://mvm-api.test.mixinbots.com'
-});
+// const mvmClient = axios.create({
+//   baseURL: 'https://api.test.mvm.dev',
+// });
 
-const receivers = ['a15e0b6d-76ed-4443-b83f-ade9eca2681a', 'b9126674-b07d-49b6-bf4f-48d965b2242b', '15141fe4-1cfd-40f8-9819-71e453054639', '3e72ca0c-1bab-49ad-aa0a-4d8471d375e7'];
+const receivers = [
+  'd5a3a450-5619-47af-a3b1-aad08e6e10dd',
+  '9d4a18aa-9b0a-40ed-ba57-ce8fbbbc6deb',
+  '2f82a56a-7fae-4bdd-bc4d-aad5005c5041',
+  'f7f33be1-399a-4d29-b50c-44e5f01cbb1b',
+  '23a070df-6b87-4b66-bdd4-f009702770c9',
+  '2385639c-eac1-4a38-a7f6-597b3f0f5b59',
+  'ab357ad7-8828-4173-b3bb-0600c518eab2',
+];
+const threshold = 5;
 
-const threshold = 3;
+const CNBAssetID = '965e5c6e-434c-3fa9-b780-c50f43cd955c';
+const MinAmount = '0.00000001';
+export const getContractByAssetID = (id: string): Promise<string> => getRegistryContract().contracts('0x' + Buffer.from(parse(id) as Buffer).toString('hex'));
 
-// 获取 mvm 的交易输入
-export const getMvmTransaction = (params: InvokeCodeParams): TransactionInput => {
-  return {
-    asset_id: params.asset,
-    amount: params.amount,
-    trace_id: params.trace || newUUID(),
-    opponent_multisig: { receivers, threshold },
-    memo: encodeMemo(params.extra, params.process || registryProcess)
-  };
-};
-
-// 根据 abi 获取 extra
-export const abiParamsGenerator = (contractAddress: string, abi: JsonFragment[]): { [method: string]: Function } => {
-  const res: { [method: string]: Function } = {};
-  if (contractAddress.startsWith('0x')) contractAddress = contractAddress.slice(2);
-  abi.forEach(item => {
-    if (item.type === 'function') {
-      const types = item.inputs?.map(v => v.type!) || [];
-      const methodID = getMethodIdByAbi(item.name!, types);
-      res[item.name!] = function () {
-        // eslint-disable-next-line prefer-rest-params
-        const values = Array.from(arguments);
-        const options = values.length === types.length + 1 ? values.pop() : {};
-        return extraGenerateByInfo({ contractAddress, methodID, types, values, options });
-      };
-    }
-  });
-  return res;
-};
-
-// 根据调用信息获取 extra
-export const extraGenerateByInfo = async (params: ExtraGenerateParams): Promise<string> => {
-  // eslint-disable-next-line prefer-const
-  let { contractAddress, methodID, methodName, types = [], values = [], options = {} } = params;
-  if (!contractAddress) return Promise.reject('contractAddress is required');
-  if (contractAddress.startsWith('0x')) contractAddress = contractAddress.slice(2);
-  if (!methodID && !methodName) return Promise.reject('methodID or methodName is required');
-  if (!methodID) methodID = getMethodIdByAbi(methodName!, types);
-  if (types.length != values.length) return Promise.reject('error: types.length!=values.length');
-  let extra = contractAddress + methodID;
-  const { uploadkey, delegatecall, ignoreUpload, process = registryProcess, address = registryAddress } = options;
-  if (types.length !== 0) {
-    const abiCoder = new utils.AbiCoder();
-    extra += abiCoder.encode(types, values).slice(2);
-  }
-  if (ignoreUpload) return extra;
-  let opcode = 0;
-  if (encodeMemo(extra, process).length > 200) {
-    if (!uploadkey) return Promise.reject('please provide key to generate extra(length > 200)');
-    const raw = '0x' + extra;
-    const key = utils.keccak256(raw);
-    const res = await mvmClient.post(`/`, { uploadkey, key, raw, address });
-    if (!res.data.hash) return Promise.reject(res);
-    opcode += 1;
-    extra = key.slice(2);
-  }
-  if (delegatecall) opcode += 2;
-  return ('0' + opcode + extra).toLowerCase();
-};
-
-export const paymentGenerateByInfo = async (params: PaymentGenerateParams): Promise<Payment | TransactionInput> => {
-  if (!params.options) params.options = {};
-  params.options.ignoreUpload = true;
-  const extra = await extraGenerateByInfo(params);
-  const { type, trace, asset, amount } = params.payment || {};
-  const { process, delegatecall, uploadkey, address } = params.options;
-  const res = await mvmClient.post('/payment', {
-    extra,
-    options: {
-      process,
-      delegatecall,
-      uploadkey,
-      address
-    },
-    payment: {
-      type,
-      trace,
-      asset,
-      amount
-    }
-  });
-  return res.data;
-};
-
-export const getContractByAssetID = (id: string, processAddress = registryAddress): Promise<string> =>
-  getRegistryContract(processAddress).contracts('0x' + Buffer.from(parse(id) as Buffer).toString('hex'));
-
-export const getContractByUserIDs = (ids: string | string[], threshold?: number, processAddress = registryAddress): Promise<string> => {
+export const getContractByUserIDs = (ids: string | string[], threshold?: number): Promise<string> => {
   if (typeof ids === 'string') ids = [ids];
   if (!threshold) threshold = ids.length;
   const encoder = new Encoder(Buffer.from([]));
   encoder.writeInt(ids.length);
   ids.forEach(id => encoder.writeUUID(id));
   encoder.writeInt(threshold);
-  return getRegistryContract(processAddress).contracts(utils.keccak256('0x' + encoder.buf.toString('hex')));
+  return getRegistryContract().contracts(utils.keccak256('0x' + encoder.buf.toString('hex')));
 };
 
-export const getAssetIDByAddress = async (contract_address: string, processAddress = registryAddress): Promise<string> => {
-  const registry = getRegistryContract(processAddress);
+export const getAssetIDByAddress = async (contract_address: string): Promise<string> => {
+  const registry = getRegistryContract();
   let res = await registry.assets(contract_address);
   res instanceof BigNumber && (res = res._hex);
   if (res.length <= 2) return '';
@@ -126,8 +49,8 @@ export const getAssetIDByAddress = async (contract_address: string, processAddre
   return stringify(Buffer.from(res, 'hex'));
 };
 
-export const getUserIDByAddress = async (contract_address: string, processAddress = registryAddress): Promise<string> => {
-  const registry = getRegistryContract(processAddress);
+export const getUserIDByAddress = async (contract_address: string): Promise<string> => {
+  const registry = getRegistryContract();
   let res = await registry.users(contract_address);
   res instanceof BigNumber && (res = res._hex);
   if (res.length <= 2) return '';
@@ -136,11 +59,12 @@ export const getUserIDByAddress = async (contract_address: string, processAddres
   return stringify(Buffer.from(res, 'hex'));
 };
 
-const getRegistryContract = (address = registryAddress) => new ethers.Contract(address, registryAbi, new ethers.providers.JsonRpcProvider('https://quorum-testnet.mixin.zone/'));
+const getRegistryContract = (address = registryAddress) => new ethers.Contract(address, registryAbi, new ethers.providers.JsonRpcProvider(mvmRPCUri));
 
 const getMethodIdByAbi = (methodName: string, types: string[]): string => utils.id(methodName + '(' + types.join(',') + ')').slice(2, 10);
 
 const encodeMemo = (extra: string, process: string): string => {
+  if (extra.startsWith('0x')) extra = extra.slice(2);
   const enc = new Encoder(Buffer.from([]));
   enc.writeInt(OperationPurposeGroupEvent);
   enc.writeUUID(process);
@@ -149,3 +73,63 @@ const encodeMemo = (extra: string, process: string): string => {
   enc.writeBytes(Buffer.from(extra, 'hex'));
   return base64url(enc.buf);
 };
+
+// address
+const getSingleExtra = ({ address, method, types = [], values = [] }: ContractParams) => {
+  if (types.length !== values.length) return '';
+
+  let addr = address.toLocaleLowerCase();
+  if (addr.startsWith('0x')) addr = addr.slice(2);
+  let contractInput = getMethodIdByAbi(method, types);
+  if (types.length != values.length) throw new Error('error: types.length!=values.length');
+  if (values.length > 0) {
+    const abiCoder = new ethers.utils.AbiCoder();
+    contractInput += abiCoder.encode(types, values).slice(2);
+  }
+
+  const inputLength = Buffer.from([0, contractInput.length / 2]).toString('hex');
+  const extra = `${addr}${inputLength}${contractInput}`;
+  return extra;
+};
+
+/**  Get extra for multiple contracts calling, started with number of contracts to be called */
+export const getExtra = (contracts: ContractParams[]) => {
+  if (contracts.length === 0) return '';
+  let extra = Buffer.from([0, contracts.length]).toString('hex');
+
+  for (let i = 0; i < contracts.length; i++) {
+    const singleExtra = Buffer.from(getSingleExtra(contracts[i]));
+    extra += singleExtra;
+  }
+
+  return '0x' + extra;
+};
+
+export class MvmClient implements MvmClientRequest {
+  newUUID!: () => string;
+  verifyPayment!: (params: TransferInput | TransactionInput) => Promise<Payment>;
+  async paymentGeneratorByContract(params: PaymentGenerateParams): Promise<Payment | TransactionInput> {
+    if (!params.contract && !params.contracts) throw new Error('error: contract or contracts is required');
+    if (params.contract) params.contracts = [params.contract];
+    const extra = getExtra(params.contracts!);
+    const { asset, amount, trace, type = 'payment' } = params.payment || {};
+    let memo = encodeMemo(extra, registryProcess).slice(2);
+    const txInput = {
+      asset_id: asset || CNBAssetID,
+      amount: amount || MinAmount,
+      trace_id: trace || this.newUUID(),
+      memo,
+      opponent_multisig: { receivers, threshold },
+    };
+    // if (memo.length > 200) {
+    //   // 上传的memo太长，则截取前200个字符
+    //   txInput.memo = extra;
+    //   const data = await mvmClient.post(`/payments`, txInput);
+    //   console.log(data);
+    //   return data.data;
+    // }
+    if (type === 'tx') return txInput;
+    if (type === 'payment') return this.verifyPayment(txInput);
+    throw new Error('error: type is invalid. type should be tx or payment');
+  }
+}

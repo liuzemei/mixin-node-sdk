@@ -1,36 +1,16 @@
 import { TransactionInput } from './transaction';
-import { JsonFragment } from '@ethersproject/abi';
 import { Payment } from './transfer';
 
-export interface InvokeCodeParams {
-  asset: string;
-  amount: string;
-  extra: string;
-  trace: string;
-  process?: string;
-}
-
-interface ContractParams {
-  contractAddress: string;
-  methodName?: string;
+export interface ContractParams {
+  address: string;
+  method: string;
   types?: string[];
   values?: any[];
-  methodID?: string;
 }
 
-export interface ExtraGenerateParams extends ContractParams {
-  options?: {
-    delegatecall?: boolean; // use delegatecall
-    process?: string; // registry process
-    address?: string; // registry address
-    uploadkey?: string; // auto upload params
-
-    ignoreUpload?: boolean; // ignore upload params
-  };
-}
-
-export interface PaymentGenerateParams extends ExtraGenerateParams {
-  extra?: string;
+export interface PaymentGenerateParams {
+  contract?: ContractParams;
+  contracts?: ContractParams[];
   payment?: {
     asset?: string;
     amount?: string;
@@ -40,8 +20,6 @@ export interface PaymentGenerateParams extends ExtraGenerateParams {
 }
 
 export interface MvmClientRequest {
-  getMvmTransaction: (params: InvokeCodeParams) => Promise<TransactionInput>;
-  abiParamsGenerator: (contractAddress: string, abi: JsonFragment[]) => { [method: string]: Function };
-  extraGenerateByInfo: (params: ExtraGenerateParams) => Promise<string>;
-  paymentGenerateByInfo: (params: PaymentGenerateParams) => Promise<Payment | TransactionInput>;
+  // getMvmTransaction: (params: InvokeCodeParams) => Promise<TransactionInput>;
+  paymentGeneratorByContract: (params: PaymentGenerateParams) => Promise<Payment | TransactionInput>;
 }

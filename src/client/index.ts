@@ -66,6 +66,8 @@ import {
   User,
   UserRelationship,
   Keystore,
+  MvmClientRequest,
+  PaymentGenerateParams,
 } from '../types';
 import { AppClient } from './app';
 import { AssetClient } from './asset';
@@ -79,20 +81,13 @@ import { TransferClient } from './transfer';
 
 export { verifyPayment } from './transfer';
 import { CollectiblesClient } from './collectibles';
+import { MvmClient } from './mvm';
 
-export {
-  getMvmTransaction,
-  abiParamsGenerator,
-  extraGenerateByInfo,
-  paymentGenerateByInfo,
-  getContractByAssetID,
-  getContractByUserIDs,
-  getAssetIDByAddress,
-  getUserIDByAddress,
-} from './mvm';
+export * from './mvm';
 
 export class Client
-  implements AddressClientRequest,
+  implements
+    AddressClientRequest,
     AppClientRequest,
     AssetClientRequest,
     AttachmentClientRequest,
@@ -103,7 +98,9 @@ export class Client
     PINClientRequest,
     SnapshotClientRequest,
     TransferClientRequest,
-    UserClientRequest {
+    UserClientRequest,
+    MvmClientRequest
+{
   request: AxiosInstance;
   keystore: Keystore;
 
@@ -193,14 +190,17 @@ export class Client
   batchReadGhostKeys!: (inputs: GhostInput[]) => Promise<GhostKeys[]>;
   makeMultisignTransaction!: (txInput: RawTransactionInput) => Promise<string>;
 
+  // Mvm...
+  paymentGeneratorByContract!: (params: PaymentGenerateParams) => Promise<Payment | TransactionInput>;
+
   // Pin...
   verifyPin!: (pin: string) => Promise<void>;
   modifyPin!: (pin: string, oldPin?: string) => Promise<void>;
   readTurnServers!: () => Promise<Turn[]>;
 
   // Snapshot...
-  readSnapshots!: (params: SnapshotQuery) => Promise<Snapshot[]>;
-  readNetworkSnapshots!: (params: SnapshotQuery) => Promise<Snapshot[]>;
+  readSnapshots!: (params?: SnapshotQuery) => Promise<Snapshot[]>;
+  readNetworkSnapshots!: (params?: SnapshotQuery) => Promise<Snapshot[]>;
   readSnapshot!: (snapshot_id: string) => Promise<Snapshot>;
   readNetworkSnapshot!: (snapshot_id: string) => Promise<Snapshot>;
 
@@ -270,6 +270,7 @@ export class Client
   TransferClient,
   UserClient,
   CollectiblesClient,
+  MvmClient,
 ].forEach(client => _extends(Client, client));
 
 function _extends(origin: any, target: any) {

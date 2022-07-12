@@ -5,11 +5,11 @@ import { Snapshot, SnapshotClientRequest, SnapshotQuery } from '../types';
 export class SnapshotClient implements SnapshotClientRequest {
   request!: AxiosInstance;
 
-  readSnapshots(params: SnapshotQuery): Promise<Snapshot[]> {
+  readSnapshots(params?: SnapshotQuery): Promise<Snapshot[]> {
     return this.request.get(`/snapshots`, { params });
   }
 
-  readNetworkSnapshots(params: SnapshotQuery): Promise<Snapshot[]> {
+  readNetworkSnapshots(params?: SnapshotQuery): Promise<Snapshot[]> {
     return this.request.get(`/network/snapshots`, { params });
   }
 
