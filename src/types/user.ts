@@ -30,6 +30,12 @@ export interface User {
   private_key?: string;
 }
 
+export interface UpdateUserParams {
+  full_name?: string;
+  avatar_base64?: string;
+  biography?: string;
+}
+
 export interface UserClientRequest {
   userMe: () => Promise<User>;
   readUser: (userIdOrIdentityNumber: string) => Promise<User>;

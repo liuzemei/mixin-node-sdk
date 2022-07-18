@@ -1,7 +1,7 @@
-import { AxiosInstance } from "axios";
-import { UserClientRequest, User, UserRelationship } from "../types/user";
-import forge from "node-forge";
-import { request } from "../services/request";
+import { AxiosInstance } from 'axios';
+import { UserClientRequest, User, UserRelationship, UpdateUserParams } from '../types/user';
+import forge from 'node-forge';
+import { request } from '../services/request';
 
 export class UserClient implements UserClientRequest {
   request!: AxiosInstance;
@@ -35,16 +35,20 @@ export class UserClient implements UserClientRequest {
     const { publicKey, privateKey } = forge.pki.ed25519.generateKeyPair();
     const params = {
       full_name,
-      session_secret: Buffer.from(publicKey).toString("base64")
+      session_secret: Buffer.from(publicKey).toString('base64'),
     };
     const u: User = await this.request.post(`/users`, params);
-    u.publick_key = publicKey.toString("base64");
-    u.private_key = privateKey.toString("base64");
+    u.publick_key = publicKey.toString('base64');
+    u.private_key = privateKey.toString('base64');
     return u;
   }
 
   modifyProfile(full_name: string, avatar_base64: string): Promise<User> {
-    return this.request.post(`/me`, { full_name, avatar_base64 });
+    return this.updateProfile({ full_name, avatar_base64 });
+  }
+
+  updateProfile(params: UpdateUserParams): Promise<User> {
+    return this.request.post(`/me`, params);
   }
 
   modifyRelationships(relationship: UserRelationship): Promise<User> {
@@ -52,7 +56,7 @@ export class UserClient implements UserClientRequest {
   }
 }
 
-export const userMe = (token: string): Promise<User> => request(undefined, token).get("/me");
+export const userMe = (token: string): Promise<User> => request(undefined, token).get('/me');
 
 export const readFriends = (token: string): Promise<User[]> => request(undefined, token).get(`/friends`);
 

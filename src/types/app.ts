@@ -20,6 +20,8 @@ export interface FavoriteApp {
   created_at: string;
 }
 
+type Capabilities = 'CONTACT' | 'GROUP' | 'IMMERSIVE' | 'ENCRYPTED';
+
 export interface UpdateAppRequest {
   redirect_uri: string;
   home_uri: string;
@@ -28,7 +30,7 @@ export interface UpdateAppRequest {
   icon_base64: string;
   session_secret: string;
   category: string;
-  capabilities: string[];
+  capabilities: Capabilities[];
   resource_patterns: string[];
 }
 
