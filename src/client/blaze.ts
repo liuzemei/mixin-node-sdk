@@ -22,7 +22,7 @@ interface BlazeHandler {
 }
 
 export class BlazeClient extends Client {
-  ws: WebSocket | null;
+  ws?: WebSocket;
   h!: BlazeHandler;
   url = oneUrl;
   isAlive = false;
@@ -34,7 +34,6 @@ export class BlazeClient extends Client {
 
   constructor(keystore?: Keystore, option?: BlazeOptions) {
     super(keystore);
-    this.ws = null;
     if (option) this.options = option;
   }
 
@@ -75,16 +74,20 @@ export class BlazeClient extends Client {
     this.ws.onerror = e => {
       e.message === 'Opening handshake has timed out' && (this.url = this.url === oneUrl ? zeromeshUrl : oneUrl);
     };
+    this.ws!.on('ping', () => {
+      this.ws!.pong();
+    });
+    this.ws!.on('pong', () => {
+      this.isAlive = true;
+    });
     this.ws.onopen = () => {
       this.isAlive = true;
+      this.heartbeat();
       this.send_raw({ id: this.newUUID(), action: 'LIST_PENDING_MESSAGES' });
     };
   }
 
   heartbeat() {
-    this.ws!.on('pong', () => {
-      this.isAlive = true;
-    });
     this.pingInterval = setInterval(() => {
       if (this.ws!.readyState === WebSocket.CONNECTING) return;
       if (!this.isAlive) return this.ws!.terminate();
