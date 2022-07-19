@@ -74,10 +74,10 @@ export class BlazeClient extends Client {
     this.ws.onerror = e => {
       e.message === 'Opening handshake has timed out' && (this.url = this.url === oneUrl ? zeromeshUrl : oneUrl);
     };
-    this.ws!.on('ping', () => {
+    this.ws.on('ping', () => {
       this.ws!.pong();
     });
-    this.ws!.on('pong', () => {
+    this.ws.on('pong', () => {
       this.isAlive = true;
     });
     this.ws.onopen = () => {
