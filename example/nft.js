@@ -23,7 +23,7 @@ async function main() {
   outputs.forEach(async output => {
     switch (output.state) {
       case 'unspent':
-        const token = await client.readCollectibleToken(ctx, output.token_id);
+        const token = await client.readCollectibleToken(output.token_id);
         handleUnspentOutput(output, token);
         break;
       case 'signed':
@@ -42,15 +42,16 @@ async function handleUnspentOutput(output, token) {
     receivers,
     threshold: 1,
   });
+  console.log(signedTx);
   const createRes = await client.createCollectibleRequest('sign', signedTx);
-  console.log('create collectible...', req);
+  console.log('create collectible...', createRes);
   const signRes = await client.signCollectibleRequest(createRes.request_id);
   console.log('sign finished...', signRes);
 }
 
 async function handleSignedOutput(output) {
   console.log(`handle signed output ${output.output_id}`);
-  const res = await sendExternalProxy('sendrawtransaction', output.signed_tx);
+  const res = await client.sendRawTransaction(output.signed_tx);
   console.log('send raw transaction finished...', res);
 }
 main();

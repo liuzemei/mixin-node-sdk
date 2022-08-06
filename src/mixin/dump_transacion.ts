@@ -14,7 +14,7 @@ export function dumpTransaction(signed: Transaction): string {
   enc.writeInt(ol);
   signed.outputs!.forEach(o => enc.encodeOutput(o));
 
-  const e = Buffer.from(signed.extra!, 'base64');
+  const e = Buffer.from(signed.extra!, 'hex');
   enc.writeInt(e.byteLength);
   enc.write(e);
 
