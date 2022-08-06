@@ -34,7 +34,11 @@ export const request = (keystore?: Keystore, token = ''): AxiosInstance => {
     (res: AxiosResponse) => {
       const { data, error } = res.data;
       if (error) {
-        error.request_id = res.headers['x-request-id'];
+        try {
+          error.request_id = res.headers['x-request-id'];
+        } catch (e) {
+          console.log(e, res.config);
+        }
         return error;
       }
       return data;

@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { base64url, getSignPIN } from '../mixin/sign';
-import { BN } from 'bn.js';
+import { BigNumber } from 'bignumber.js';
 import { Keystore, MultisigClientRequest, MultisigRequest, MultisigUTXO, MultisigAction, RawTransactionInput, Transaction, GhostInput, GhostKeys } from '../types';
 import { DumpOutputFromGhostKey, dumpTransaction } from '../mixin/dump_transacion';
 import { hashMember, newHash } from '../mixin/tools';
@@ -12,6 +12,10 @@ export class MultisigsClient implements MultisigClientRequest {
 
   readMultisigs(offset: string, limit: number): Promise<MultisigUTXO[]> {
     return this.request.get(`/multisigs`, { params: { offset, limit } });
+  }
+
+  readMultisigOutput(id: string): Promise<MultisigUTXO> {
+    return this.request.get(`/multisigs/outputs/${id}`);
   }
 
   readMultisigOutputs(members: string[], threshold: number, offset: string, limit: number): Promise<MultisigUTXO[]> {
@@ -34,7 +38,7 @@ export class MultisigsClient implements MultisigClientRequest {
     return this.request.post(`/multisigs/requests/${request_id}/cancel`);
   }
 
-  unlockMultisig(request_id: string, pin: string): Promise<void> {
+  unlockMultisig(request_id: string, pin?: string): Promise<void> {
     pin = getSignPIN(this.keystore, pin);
     return this.request.post(`/multisigs/requests/${request_id}/unlock`, {
       pin,
@@ -66,9 +70,9 @@ export class MultisigsClient implements MultisigClientRequest {
         index: input.output_index,
       });
     }
-    let change = inputs.reduce((sum, input) => sum.add(new BN(input.amount)), new BN(0));
-    for (const output of outputs) change = change.sub(new BN(output.amount));
-    if (change.gt(new BN(0)))
+    let change = inputs.reduce((sum, input) => sum.plus(new BigNumber(input.amount)), new BigNumber(0));
+    for (const output of outputs) change = change.minus(new BigNumber(output.amount));
+    if (change.gt(new BigNumber(0)))
       outputs.push({
         receivers: inputs[0].members,
         threshold: inputs[0].threshold,

@@ -181,11 +181,13 @@ export class Client
 
   // Multisigs...
   readMultisigs!: (offset: string, limit: number) => Promise<MultisigUTXO[]>;
+  readMultisigOutput!: (id: string) => Promise<MultisigUTXO>;
   readMultisigOutputs!: (members: string[], threshold: number, offset: string, limit: number) => Promise<MultisigUTXO[]>;
   createMultisig!: (action: string, raw: string) => Promise<MultisigRequest>;
-  signMultisig!: (request_id: string, pin: string) => Promise<MultisigRequest>;
+  signMultisig!: (request_id: string, pin?: string) => Promise<MultisigRequest>;
   cancelMultisig!: (request_id: string) => Promise<void>;
-  unlockMultisig!: (request_id: string, pin: string) => Promise<void>;
+  unlockMultisig!: (request_id: string, pin?: string) => Promise<void>;
+  sendRawTransaction!: (raw: string) => Promise<{ hash: string }>;
   readGhostKeys!: (receivers: string[], index: number) => Promise<GhostKeys>;
   batchReadGhostKeys!: (inputs: GhostInput[]) => Promise<GhostKeys[]>;
   makeMultisignTransaction!: (txInput: RawTransactionInput) => Promise<string>;

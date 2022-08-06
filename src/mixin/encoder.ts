@@ -1,5 +1,5 @@
 import { Aggregated, Input, Output } from '../types';
-import { BN } from 'bn.js';
+import { BigNumber } from 'bignumber.js';
 import { parse } from 'uuid';
 
 const aggregatedSignaturePrefix = 0xff01;
@@ -116,7 +116,7 @@ export class Encoder {
   encodeOutput(o: Output) {
     if (!o.type) o.type = 0;
     this.write(Buffer.from([0x00, o.type]));
-    this.writeInteger(new BN(1e8).mul(new BN(o.amount!)).toNumber());
+    this.writeInteger(new BigNumber(1e8).times(new BigNumber(o.amount!)).toNumber());
     this.writeInt(o.keys!.length);
 
     o.keys!.forEach(k => this.write(Buffer.from(k, 'hex')));

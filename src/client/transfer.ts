@@ -26,6 +26,10 @@ export class TransferClient implements TransferClientRequest {
     return this.request.post('/transactions', params);
   }
 
+  sendRawTransaction(raw: string): Promise<{ hash: string }> {
+    return this.request.post('/external/proxy', { method: 'sendrawtransaction', params: [raw] });
+  }
+
   withdraw(params: WithdrawInput, pin?: string): Promise<Snapshot> {
     params.pin = getSignPIN(this.keystore, pin);
     return this.request.post('/withdrawals', params);

@@ -71,5 +71,6 @@ export interface TransferClientRequest {
   transfer: (params: TransferInput, pin?: string) => Promise<Snapshot>;
   readTransfer: (trace_id: string) => Promise<Snapshot>;
   transaction: (params: TransactionInput, pin?: string) => Promise<RawTransaction>;
+  sendRawTransaction: (raw: string) => Promise<{ hash: string }>;
   withdraw: (params: WithdrawInput, pin?: string) => Promise<Snapshot>;
 }
