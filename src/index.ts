@@ -7,4 +7,5 @@ export { readAsset, readAssets } from './client/asset';
 export { readConversation } from './client/conversation';
 export { readSnapshot, readSnapshots } from './client/snapshot';
 export { userMe, readBlockUsers, readFriends } from './client/user';
+export { createCollectibleRequest } from './client/collectibles';
 export { request, mixinRequest } from './services/request';

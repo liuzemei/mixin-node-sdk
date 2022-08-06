@@ -18,6 +18,7 @@ import { hashMember } from '../mixin/tools';
 import { TxVersion } from '../mixin/encoder';
 import { getSignPIN } from '../mixin/sign';
 import { buildMintCollectibleMemo } from '../mixin/nfo';
+import { request } from '../services/request';
 
 const MintAssetID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 const MintMinimumCost = '0.001';
@@ -110,3 +111,6 @@ export class CollectiblesClient implements CollectiblesClientRequest {
     });
   }
 }
+
+export const createCollectibleRequest = (token: string, action: CollectibleAction, raw: string): Promise<CollectibleRequest> =>
+  request(undefined, token).post(`/collectibles/requests`, { action, raw });
