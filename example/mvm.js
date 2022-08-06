@@ -1,6 +1,5 @@
 const { Client, getContractByAssetID, getAssetIDByAddress, getContractByUserIDs, getUserIDByAddress } = require('mixin-node-sdk');
-const fs = require('fs');
-const keystore = JSON.parse(fs.readFileSync(__dirname + '/../config.json', 'utf8'));
+const keystore = require('./keystore.json');
 const client = new Client(keystore);
 
 async function main() {

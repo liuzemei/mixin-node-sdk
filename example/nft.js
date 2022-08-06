@@ -1,12 +1,11 @@
 const { Client } = require('mixin-node-sdk'); // >= 3.0.13
 const keystore = require('./keystore.json');
-const { v4: uuid } = require('uuid');
 const client = new Client(keystore);
 const isMint = true;
 
 async function main() {
   if (isMint) {
-    const id = uuid();
+    const id = client.newUUID();
     const tr = client.newMintCollectibleTransferInput({
       trace_id: id,
       collection_id: id,
