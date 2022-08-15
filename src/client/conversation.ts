@@ -12,7 +12,7 @@ export class ConversationClient implements ConversationClientRequest {
   }
 
   updateConversation(conversationID: string, params: ConversationUpdateParams): Promise<Conversation> {
-    return this.request.put(`/conversations/${conversationID}`, params);
+    return this.request.post(`/conversations/${conversationID}`, params);
   }
 
   createContactConversation(userID: string): Promise<Conversation> {

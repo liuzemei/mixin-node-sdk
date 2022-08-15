@@ -2,6 +2,8 @@
 
 [中文版](./README.zh-CN.md)
 
+[中文版文档](https://liuzemei.github.io/mixin-js-sdk-docs/docs/server/intro)
+
 The Node.js version of the mixin SDK
 
 ## New version features
@@ -59,7 +61,7 @@ const client = new BlazeClient(
     pin: '',
     client_secret: '',
   },
-  { parse: true, syncAck: true }
+  { parse: true, syncAck: true },
 );
 
 client.loopBlaze({
