@@ -1,5 +1,7 @@
 此仓库已废弃。请使用。
 
+[中文版文档](https://liuzemei.github.io/mixin-js-sdk-docs/docs/server/intro)
+
 [新版 sdk 请点击这里](https://github.com/liuzemei/bot-api-nodejs-client)
 
 [新版 sdk 视频教程请点击这里](https://developers.mixinbots.com/courses/1e276ee9-18fb-42e3-915a-54b049679084)
