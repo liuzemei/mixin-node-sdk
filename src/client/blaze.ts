@@ -102,10 +102,10 @@ export class BlazeClient extends Client {
       const msgObj = JSON.parse(t);
       if (this.options?.parse && msgObj.data && msgObj.data.data) {
         msgObj.data.data = Buffer.from(msgObj.data.data, 'base64').toString();
-        try {
-          msgObj.data.data = JSON.parse(msgObj.data.data);
-        } catch (e) {
-          console.log('blaze decode error....', e);
+        if (msgObj.data && msgObj.data.data) {
+          try {
+            msgObj.data.data = JSON.parse(msgObj.data.data);
+          } catch (e) {}
         }
       }
       resolve(msgObj.data);
