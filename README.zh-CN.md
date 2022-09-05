@@ -4,7 +4,7 @@ mixin 的 nodejs 版 sdk
 
 [中文版文档](https://liuzemei.github.io/mixin-js-sdk-docs/docs/server/intro)
 
-[中文版视频教程](https://github.com/liuzemei/bot-api-nodejs-client)
+[中文版视频教程](https://developers.mixinbots.com/courses/1e276ee9-18fb-42e3-915a-54b049679084)
 
 ## 新版本特性
 
