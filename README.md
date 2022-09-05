@@ -70,6 +70,9 @@ client.loopBlaze({
   onMessage(msg) {
     console.log(msg);
   },
+  onAckReceipt(msg) {
+    console.log('ack', msg);
+  },
 });
 ```
 
