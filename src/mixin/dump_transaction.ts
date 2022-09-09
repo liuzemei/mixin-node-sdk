@@ -1,5 +1,5 @@
 import { GhostKeys, Transaction } from '../types';
-import { Encoder, magic, maxEcodingInt, OperatorCmp, OperatorSum } from './encoder';
+import { Encoder, magic, maxEncodingInt, OperatorCmp, OperatorSum } from './encoder';
 
 export function dumpTransaction(signed: Transaction): string {
   const enc = new Encoder(magic);
@@ -22,7 +22,7 @@ export function dumpTransaction(signed: Transaction): string {
     enc.encodeAggregatedSignature(signed.aggregated);
   } else {
     const sl = signed.signatures ? Object.keys(signed.signatures).length : 0;
-    if (sl == maxEcodingInt) throw new Error('signatures overflow');
+    if (sl == maxEncodingInt) throw new Error('signatures overflow');
     enc.writeInt(sl);
     if (sl > 0) {
       enc.encodeSignature(signed.signatures!);

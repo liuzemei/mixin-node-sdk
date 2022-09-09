@@ -1,5 +1,4 @@
-import { TransactionInput } from './transaction';
-import { Payment } from './transfer';
+import { TransactionInput, Payment } from '.';
 
 export interface ContractParams {
   address: string;

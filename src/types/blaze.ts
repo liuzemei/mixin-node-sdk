@@ -1,4 +1,4 @@
-import { MessageCategory, MessageStatus } from './message';
+import { MessageCategory, MessageStatus } from '.';
 
 export interface BlazeMessage {
   id: string;

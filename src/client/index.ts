@@ -25,7 +25,7 @@ import {
   CollectibleOutput,
   RawCollectibleInput,
   ConversationClientRequest,
-  ConversationCreateParmas,
+  ConversationCreateParams,
   Conversation,
   ConversationUpdateParams,
   Participant,
@@ -37,7 +37,7 @@ import {
   ImageMessage,
   DataMessage,
   StickerMessage,
-  ContactMesage,
+  ContactMessage,
   AppCardMessage,
   AudioMessage,
   LiveMessage,
@@ -147,7 +147,7 @@ export class Client
   unlockCollectibleRequest!: (requestId: string, pin?: string) => Promise<void>;
 
   // Conversation...
-  createConversation!: (params: ConversationCreateParmas) => Promise<Conversation>;
+  createConversation!: (params: ConversationCreateParams) => Promise<Conversation>;
   updateConversation!: (conversationID: string, params: ConversationUpdateParams) => Promise<Conversation>;
   createContactConversation!: (userID: string) => Promise<Conversation>;
   createGroupConversation!: (conversationID: string, name: string, participant: Participant[]) => Promise<Conversation>;
@@ -170,7 +170,7 @@ export class Client
   sendImageMsg!: (userID: string, image: ImageMessage) => Promise<MessageView>;
   sendDataMsg!: (userID: string, data: DataMessage) => Promise<MessageView>;
   sendStickerMsg!: (userID: string, sticker: StickerMessage) => Promise<MessageView>;
-  sendContactMsg!: (userID: string, contact: ContactMesage) => Promise<MessageView>;
+  sendContactMsg!: (userID: string, contact: ContactMessage) => Promise<MessageView>;
   sendAppCardMsg!: (userID: string, appCard: AppCardMessage) => Promise<MessageView>;
   sendAudioMsg!: (userID: string, audio: AudioMessage) => Promise<MessageView>;
   sendLiveMsg!: (userID: string, live: LiveMessage) => Promise<MessageView>;

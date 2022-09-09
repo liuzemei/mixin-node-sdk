@@ -13,7 +13,7 @@ import {
   CollectibleRequest,
   CollectibleOutput,
 } from '../types';
-import { DumpOutputFromGhostKey, dumpTransaction } from '../mixin/dump_transacion';
+import { DumpOutputFromGhostKey, dumpTransaction } from '../mixin/dump_transaction';
 import { hashMember } from '../mixin/tools';
 import { TxVersion } from '../mixin/encoder';
 import { getSignPIN } from '../mixin/sign';

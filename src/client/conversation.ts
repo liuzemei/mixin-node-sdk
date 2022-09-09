@@ -1,13 +1,13 @@
 import { AxiosInstance } from 'axios';
 import { request } from '../services/request';
-import { ConversationClientRequest, ConversationCreateParmas, Conversation, ConversationUpdateParams, Participant, ConversationAction, Keystore } from '../types';
+import { ConversationClientRequest, ConversationCreateParams, Conversation, ConversationUpdateParams, Participant, ConversationAction, Keystore } from '../types';
 
 export class ConversationClient implements ConversationClientRequest {
   keystore!: Keystore;
   request!: AxiosInstance;
   uniqueConversationID!: (userID: string, recipientID: string) => string;
 
-  createConversation(params: ConversationCreateParmas): Promise<Conversation> {
+  createConversation(params: ConversationCreateParams): Promise<Conversation> {
     return this.request.post('/conversations', params);
   }
 

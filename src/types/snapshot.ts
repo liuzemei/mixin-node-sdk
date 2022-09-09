@@ -1,4 +1,4 @@
-import { Asset } from './asset';
+import { Asset } from '.';
 
 export interface Snapshot {
   type: string;

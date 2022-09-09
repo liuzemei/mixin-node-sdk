@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 import { base64url, getSignPIN } from '../mixin/sign';
 import { BigNumber } from 'bignumber.js';
 import { Keystore, MultisigClientRequest, MultisigRequest, MultisigUTXO, MultisigAction, RawTransactionInput, Transaction, GhostInput, GhostKeys } from '../types';
-import { DumpOutputFromGhostKey, dumpTransaction } from '../mixin/dump_transacion';
+import { DumpOutputFromGhostKey, dumpTransaction } from '../mixin/dump_transaction';
 import { hashMember, newHash } from '../mixin/tools';
 import { TxVersion } from '../mixin/encoder';
 

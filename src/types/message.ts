@@ -1,4 +1,4 @@
-import { MessageView } from './blaze';
+import { MessageView } from '.';
 
 export type MessageCategory =
   | 'PLAIN_TEXT'
@@ -45,7 +45,7 @@ export interface StickerMessage {
   album_id?: string;
 }
 
-export interface ContactMesage {
+export interface ContactMessage {
   user_id: string;
 }
 
@@ -126,7 +126,7 @@ export interface MessageClientRequest {
   sendImageMsg: (userID: string, image: ImageMessage) => Promise<MessageView>;
   sendDataMsg: (userID: string, data: DataMessage) => Promise<MessageView>;
   sendStickerMsg: (userID: string, sticker: StickerMessage) => Promise<MessageView>;
-  sendContactMsg: (userID: string, contact: ContactMesage) => Promise<MessageView>;
+  sendContactMsg: (userID: string, contact: ContactMessage) => Promise<MessageView>;
   sendAppCardMsg: (userID: string, appCard: AppCardMessage) => Promise<MessageView>;
   sendAudioMsg: (userID: string, audio: AudioMessage) => Promise<MessageView>;
   sendLiveMsg: (userID: string, live: LiveMessage) => Promise<MessageView>;

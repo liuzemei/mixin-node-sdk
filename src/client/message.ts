@@ -10,7 +10,7 @@ import {
   ImageMessage,
   DataMessage,
   StickerMessage,
-  ContactMesage,
+  ContactMessage,
   AppCardMessage,
   AudioMessage,
   LiveMessage,
@@ -81,7 +81,7 @@ export class MessageClient implements MessageClientRequest {
     return this.sendMsg(userID, 'PLAIN_STICKER', sticker);
   }
 
-  sendContactMsg(userID: string, contact: ContactMesage): Promise<MessageView> {
+  sendContactMsg(userID: string, contact: ContactMessage): Promise<MessageView> {
     return this.sendMsg(userID, 'PLAIN_CONTACT', contact);
   }
 

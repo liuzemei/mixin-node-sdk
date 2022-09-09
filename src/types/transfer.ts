@@ -1,7 +1,4 @@
-import { User } from './user';
-import { Asset } from './asset';
-import { Snapshot } from './snapshot';
-import { TransactionInput } from '.';
+import { TransactionInput, Snapshot, Asset, User } from '.';
 
 export interface Payment {
   recipient: User;

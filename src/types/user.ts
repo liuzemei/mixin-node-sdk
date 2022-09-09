@@ -1,4 +1,6 @@
-import { App } from './app';
+import { App } from '.';
+
+export type AcceptSource = 'EVERYBODY' | 'CONTACTS';
 
 export interface User {
   type: 'user';
@@ -20,20 +22,26 @@ export interface User {
   code_url?: string;
   has_pin?: boolean;
   has_emergency_contact?: boolean;
-  receive_message_source?: string;
-  accept_conversation_source?: string;
-  accept_search_source?: string;
+  receive_message_source?: AcceptSource;
+  accept_conversation_source?: AcceptSource;
+  accept_search_source?: AcceptSource;
   fiat_currency?: string;
   device_status?: string;
 
-  publick_key?: string;
+  public_key?: string;
   private_key?: string;
 }
 
 export interface UpdateUserParams {
   full_name?: string;
   avatar_base64?: string;
+  receive_message_source?: AcceptSource;
+  accept_conversation_source?: AcceptSource;
+  accept_search_source?: AcceptSource;
   biography?: string;
+  fiat_currency?: string;
+  transfer_notification_threshold?: number; // default 0
+  transfer_confirmation_threshold?: number; // default 100
 }
 
 export interface UserClientRequest {
