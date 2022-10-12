@@ -9,3 +9,5 @@ export { readSnapshot, readSnapshots } from './client/snapshot';
 export { userMe, readBlockUsers, readFriends } from './client/user';
 export { createCollectibleRequest } from './client/collectibles';
 export { request, mixinRequest } from './services/request';
+
+export { getSignPIN } from './mixin/sign';

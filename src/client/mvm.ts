@@ -93,7 +93,7 @@ const getSingleExtra = ({ address, method, types = [], values = [] }: ContractPa
 };
 
 /**  Get extra for multiple contracts calling, started with number of contracts to be called */
-export const getExtra = (contracts: ContractParams[]) => {
+const getExtra = (contracts: ContractParams[]) => {
   if (contracts.length === 0) return '';
   let extra = Buffer.from([0, contracts.length]).toString('hex');
 
