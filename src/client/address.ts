@@ -1,6 +1,7 @@
 import { Keystore, Address, AddressCreateParams, AddressClientRequest } from '../types';
 import { AxiosInstance } from 'axios';
 import { getSignPIN } from '../mixin/sign';
+import { request } from '../services/request';
 
 export class AddressClient implements AddressClientRequest {
   request!: AxiosInstance;
@@ -24,3 +25,5 @@ export class AddressClient implements AddressClientRequest {
     return this.request.post(`/addresses/${addressID}/delete`, { pin });
   }
 }
+
+export const readAddresses = (token: string, assetID: string): Promise<Address[]> => request(undefined, token).get(`/assets/${assetID}/addresses`);
