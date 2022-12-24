@@ -78,7 +78,7 @@ client.loopBlaze({
 
 ## 注意
 
-1. 如果你使用的是 `mixin-node-sdk@2.xx.xx` 的版本，请看 [https://github.com/liuzemei/mixin-node-sdk](https://github.com/liuzemei/mixin-node-sdk)
+1. 如果你使用的是 `mixin-node-sdk@2.xx.xx` 的版本，请看 [https://github.com/liuzemei/mixin-node-sdk/tree/v2](https://github.com/liuzemei/mixin-node-sdk/tree/v2)
 
 ## 贡献
 
