@@ -69,6 +69,8 @@ import {
   MvmClientRequest,
   PaymentGenerateParams,
   OauthClientRequest,
+  AuthData,
+  Scope,
 } from '../types';
 import { AppClient } from './app';
 import { AssetClient } from './asset';
@@ -229,6 +231,7 @@ export class Client
 
   // Oauth...
   authorizeToken!: (code: string, client_secret?: string, code_verifier?: string) => Promise<{ access_token: string; scope: string }>;
+  getAuthorizeCode!: (client_id: string, _scopes?: Scope[], pin?: string) => Promise<AuthData>;
 
   newUUID(): string {
     return uuid();
