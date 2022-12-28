@@ -19,7 +19,8 @@ export class OauthClient implements OauthClientRequest {
     });
   }
 
-  async getAuthorizeCode(client_id: string, _scopes?: Scope[], pin?: string): Promise<AuthData> {
+  async getAuthorizeCode(params: { client_id: string; scopes?: Scope[]; pin?: string }): Promise<AuthData> {
+    const { client_id, scopes: _scopes, pin } = params;
     const { authorization_id, scopes } = await this.getAuthorizeData(client_id, _scopes);
     const pin_base64 = getSignPIN(this.keystore, pin);
     return this.request.post('/oauth/authorize', { authorization_id, scopes, pin_base64 });
