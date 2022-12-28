@@ -68,6 +68,7 @@ import {
   Keystore,
   MvmClientRequest,
   PaymentGenerateParams,
+  OauthClientRequest,
 } from '../types';
 import { AppClient } from './app';
 import { AssetClient } from './asset';
@@ -78,6 +79,7 @@ import { MultisigsClient } from './multisigs';
 import { PINClient } from './pin';
 import { SnapshotClient } from './snapshot';
 import { TransferClient } from './transfer';
+import { OauthClient } from './oauth';
 
 export { verifyPayment } from './transfer';
 import { CollectiblesClient } from './collectibles';
@@ -99,7 +101,8 @@ export class Client
     SnapshotClientRequest,
     TransferClientRequest,
     UserClientRequest,
-    MvmClientRequest
+    MvmClientRequest,
+    OauthClientRequest
 {
   request: AxiosInstance;
   keystore: Keystore;
@@ -225,16 +228,7 @@ export class Client
   readBlockUsers!: () => Promise<User[]>;
 
   // Oauth...
-  authorizeToken(code: string, client_secret?: string, code_verifier?: string): Promise<{ access_token: string; scope: string }> {
-    if (!client_secret) client_secret = this.keystore.client_secret;
-    if (!client_secret) return Promise.reject(new Error('client_secret required'));
-    return this.request.post('/oauth/token', {
-      client_secret,
-      code,
-      code_verifier,
-      client_id: this.keystore.client_id,
-    });
-  }
+  authorizeToken!: (code: string, client_secret?: string, code_verifier?: string) => Promise<{ access_token: string; scope: string }>;
 
   newUUID(): string {
     return uuid();
@@ -273,6 +267,7 @@ export class Client
   UserClient,
   CollectiblesClient,
   MvmClient,
+  OauthClient,
 ].forEach(client => _extends(Client, client));
 
 function _extends(origin: any, target: any) {

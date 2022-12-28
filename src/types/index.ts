@@ -16,3 +16,5 @@ export * from './network_transaction';
 export * from './transaction';
 export * from './collectibles';
 export * from './mvm';
+
+export * from './oauth';
