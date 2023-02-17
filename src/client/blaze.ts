@@ -5,6 +5,7 @@ import { Keystore } from '../types';
 import WebSocket from 'ws';
 import { BlazeMessage, MessageView } from '../types/blaze';
 import { gzip, ungzip } from 'pako';
+import { decryptMessageData } from '../mixin/dump_msg';
 
 const zeromeshUrl = 'wss://mixin-blaze.zeromesh.net';
 const oneUrl = 'wss://blaze.mixin.one/';
@@ -15,10 +16,10 @@ interface BlazeOptions {
 }
 
 interface BlazeHandler {
-  onMessage: (message: MessageView) => void;
-  onAckReceipt?: (message: MessageView) => void;
-  onTransfer?: (transfer: MessageView) => void;
-  onConversation?: (conversation: MessageView) => void;
+  onMessage: (message: MessageView) => void | Promise<void>;
+  onAckReceipt?: (message: MessageView) => void | Promise<void>;
+  onTransfer?: (transfer: MessageView) => void | Promise<void>;
+  onConversation?: (conversation: MessageView) => void | Promise<void>;
 }
 
 export class BlazeClient extends Client {
@@ -53,8 +54,19 @@ export class BlazeClient extends Client {
       handshakeTimeout: 3000,
     });
     this.ws.onmessage = async event => {
-      const msg = await this.decode(event.data as Uint8Array);
+      const msg = this.decode(event.data as Uint8Array);
       if (!msg) return;
+      if (msg.category && msg.category.startsWith('ENCRYPTED_')) {
+        msg.data = decryptMessageData(msg.data_base64!, this.keystore.session_id, this.keystore.private_key);
+      }
+      if (this.options?.parse && msg.data) {
+        msg.data = Buffer.from(msg.data, 'base64').toString();
+        if (msg.data) {
+          try {
+            msg.data = JSON.parse(msg.data);
+          } catch (e) {}
+        }
+      }
       if (msg.source === 'ACKNOWLEDGE_MESSAGE_RECEIPT' && this.h.onAckReceipt) await this.h.onAckReceipt(msg);
       else if (msg.category === 'SYSTEM_CONVERSATION' && this.h.onConversation) await this.h.onConversation(msg);
       else if (msg.category === 'SYSTEM_ACCOUNT_SNAPSHOT' && this.h.onTransfer) await this.h.onTransfer(msg);
@@ -96,20 +108,10 @@ export class BlazeClient extends Client {
     }, 1000 * 30);
   }
 
-  decode(data: Uint8Array): Promise<MessageView> {
-    return new Promise(resolve => {
-      const t = ungzip(data, { to: 'string' });
-      const msgObj = JSON.parse(t);
-      if (this.options?.parse && msgObj.data && msgObj.data.data) {
-        msgObj.data.data = Buffer.from(msgObj.data.data, 'base64').toString();
-        if (msgObj.data && msgObj.data.data) {
-          try {
-            msgObj.data.data = JSON.parse(msgObj.data.data);
-          } catch (e) {}
-        }
-      }
-      resolve(msgObj.data);
-    });
+  decode(data: Uint8Array): MessageView {
+    const t = ungzip(data, { to: 'string' });
+    const msgObj = JSON.parse(t);
+    return msgObj.data;
   }
 
   send_raw(message: BlazeMessage) {

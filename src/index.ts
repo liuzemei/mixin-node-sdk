@@ -12,3 +12,5 @@ export { createCollectibleRequest } from './client/collectibles';
 export { request, mixinRequest } from './services/request';
 
 export { getSignPIN } from './mixin/sign';
+
+export { decryptAttachment } from './mixin/dump_msg';

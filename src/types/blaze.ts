@@ -1,4 +1,4 @@
-import { MessageCategory, MessageStatus } from '.';
+import { MessageCategory, MessageStatus, Session } from '.';
 
 export interface BlazeMessage {
   id: string;
@@ -9,21 +9,28 @@ export interface BlazeMessage {
 
 export type MessageType = MessageView | TransferView | SystemConversationPayload;
 
-export interface MessageView {
-  type: 'message';
-  representative_id: string;
-  quote_message_id: string;
-  conversation_id: string;
-  user_id: string;
-  session_id: string;
+export interface EncryptMessageView {
   message_id: string;
-  category: MessageCategory;
-  data: string;
-  data_base64: string;
-  status: MessageStatus;
-  source: string;
-  created_at: string;
-  updated_at: string;
+  recipient_id: string;
+  state: string;
+  sessions: Session[];
+}
+
+export interface MessageView {
+  type?: 'message';
+  representative_id?: string;
+  quote_message_id?: string;
+  conversation_id?: string;
+  user_id?: string;
+  session_id?: string;
+  message_id?: string;
+  category?: MessageCategory;
+  data?: string;
+  data_base64?: string;
+  status?: MessageStatus;
+  source?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface TransferView {

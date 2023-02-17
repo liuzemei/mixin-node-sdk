@@ -71,6 +71,8 @@ import {
   OauthClientRequest,
   AuthData,
   Scope,
+  EncryptMessageView,
+  Session,
 } from '../types';
 import { AppClient } from './app';
 import { AssetClient } from './asset';
@@ -183,6 +185,21 @@ export class Client
   sendLocationMsg!: (userID: string, location: LocationMessage) => Promise<MessageView>;
   sendAppButtonMsg!: (userID: string, appButton: AppButtonMessage[]) => Promise<MessageView>;
   sendRecallMsg!: (userID: string, message: RecallMessage) => Promise<MessageView>;
+
+  sendEncryptMessage!: (message: MessageRequest) => Promise<EncryptMessageView>;
+  sendEncryptMessages!: (messages: MessageRequest[]) => Promise<EncryptMessageView[]>;
+  sendEncryptTextMsg!: (userID: string, text: string) => Promise<EncryptMessageView>;
+  sendEncryptPostMsg!: (userID: string, text: string) => Promise<EncryptMessageView>;
+  sendEncryptImageMsg!: (userID: string, image: ImageMessage) => Promise<EncryptMessageView>;
+  sendEncryptDataMsg!: (userID: string, data: DataMessage) => Promise<EncryptMessageView>;
+  sendEncryptStickerMsg!: (userID: string, sticker: StickerMessage) => Promise<EncryptMessageView>;
+  sendEncryptContactMsg!: (userID: string, contact: ContactMessage) => Promise<EncryptMessageView>;
+  sendEncryptAudioMsg!: (userID: string, audio: AudioMessage) => Promise<EncryptMessageView>;
+  sendEncryptLiveMsg!: (userID: string, live: LiveMessage) => Promise<EncryptMessageView>;
+  sendEncryptVideoMsg!: (userID: string, video: VideoMessage) => Promise<EncryptMessageView>;
+  sendEncryptLocationMsg!: (userID: string, location: LocationMessage) => Promise<EncryptMessageView>;
+
+  getSessions!: (userIDs: string[]) => Promise<Session[]>;
 
   // Multisigs...
   readMultisigs!: (offset: string, limit: number) => Promise<MultisigUTXO[]>;

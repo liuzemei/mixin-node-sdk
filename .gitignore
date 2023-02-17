@@ -6,3 +6,4 @@ dist
 
 config.json
 test/index.js
+.sessions

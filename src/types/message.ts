@@ -1,6 +1,16 @@
-import { MessageView } from '.';
+import { EncryptMessageView, MessageView } from '.';
 
 export type MessageCategory =
+  | 'ENCRYPTED_TEXT'
+  | 'ENCRYPTED_AUDIO'
+  | 'ENCRYPTED_POST'
+  | 'ENCRYPTED_IMAGE'
+  | 'ENCRYPTED_DATA'
+  | 'ENCRYPTED_STICKER'
+  | 'ENCRYPTED_LIVE'
+  | 'ENCRYPTED_LOCATION'
+  | 'ENCRYPTED_VIDEO'
+  | 'ENCRYPTED_CONTACT'
   | 'PLAIN_TEXT'
   | 'PLAIN_AUDIO'
   | 'PLAIN_POST'
@@ -23,7 +33,12 @@ export interface RecallMessage {
   message_id: string;
 }
 
-export interface ImageMessage {
+interface EncryptMsg {
+  key?: string;
+  digest?: string;
+}
+
+export interface ImageMessage extends EncryptMsg {
   attachment_id: string;
   mime_type: string;
   width: number;
@@ -32,7 +47,7 @@ export interface ImageMessage {
   thumbnail?: string;
 }
 
-export interface DataMessage {
+export interface DataMessage extends EncryptMsg {
   attachment_id: string;
   mime_type: string;
   size: number;
@@ -58,7 +73,7 @@ export interface AppCardMessage {
   shareable?: boolean;
 }
 
-export interface AudioMessage {
+export interface AudioMessage extends EncryptMsg {
   attachment_id: string;
   mime_type: string;
   size: number;
@@ -74,7 +89,7 @@ export interface LiveMessage {
   shareable?: boolean;
 }
 
-export interface VideoMessage {
+export interface VideoMessage extends EncryptMsg {
   attachment_id: string;
   mime_type: string;
   width: number;
@@ -82,6 +97,12 @@ export interface VideoMessage {
   size: number;
   duration: number;
   thumbnail?: string;
+}
+
+export interface Session {
+  session_id: string;
+  user_id?: string;
+  public_key?: string;
 }
 
 export interface LocationMessage {
@@ -101,10 +122,14 @@ export interface MessageRequest {
   conversation_id: string;
   message_id: string;
   category: MessageCategory;
-  data: string;
+  data?: string;
+  data_base64?: string;
   recipient_id?: string;
   representative_id?: string;
   quote_message_id?: string;
+
+  checksum?: string;
+  recipient_sessions?: Session[];
 }
 
 export interface AcknowledgementRequest {
@@ -116,7 +141,10 @@ export interface MessageClientRequest {
   sendAcknowledgements: (messages: AcknowledgementRequest[]) => Promise<void>;
   sendAcknowledgement: (message: AcknowledgementRequest) => Promise<void>;
   sendMessage: (message: MessageRequest) => Promise<MessageView>;
-  sendMessages: (messages: MessageRequest[]) => Promise<undefined>;
+  sendMessages: (messages: MessageRequest[]) => Promise<void>;
+
+  sendEncryptMessage: (message: MessageRequest) => Promise<EncryptMessageView>;
+  sendEncryptMessages: (messages: MessageRequest[]) => Promise<EncryptMessageView[]>;
 
   sendMessageText: (userID: string, text: string) => Promise<MessageView>;
   sendMessagePost: (userID: string, text: string) => Promise<MessageView>;
@@ -127,11 +155,21 @@ export interface MessageClientRequest {
   sendDataMsg: (userID: string, data: DataMessage) => Promise<MessageView>;
   sendStickerMsg: (userID: string, sticker: StickerMessage) => Promise<MessageView>;
   sendContactMsg: (userID: string, contact: ContactMessage) => Promise<MessageView>;
-  sendAppCardMsg: (userID: string, appCard: AppCardMessage) => Promise<MessageView>;
   sendAudioMsg: (userID: string, audio: AudioMessage) => Promise<MessageView>;
   sendLiveMsg: (userID: string, live: LiveMessage) => Promise<MessageView>;
   sendVideoMsg: (userID: string, video: VideoMessage) => Promise<MessageView>;
   sendLocationMsg: (userID: string, location: LocationMessage) => Promise<MessageView>;
-  sendAppButtonMsg: (userID: string, appButton: AppButtonMessage[]) => Promise<MessageView>;
-  sendRecallMsg: (userID: string, message: RecallMessage) => Promise<MessageView>;
+
+  sendEncryptTextMsg: (userID: string, text: string) => Promise<EncryptMessageView>;
+  sendEncryptPostMsg: (userID: string, text: string) => Promise<EncryptMessageView>;
+  sendEncryptImageMsg: (userID: string, image: ImageMessage) => Promise<EncryptMessageView>;
+  sendEncryptDataMsg: (userID: string, data: DataMessage) => Promise<EncryptMessageView>;
+  sendEncryptStickerMsg: (userID: string, sticker: StickerMessage) => Promise<EncryptMessageView>;
+  sendEncryptContactMsg: (userID: string, contact: ContactMessage) => Promise<EncryptMessageView>;
+  sendEncryptAudioMsg: (userID: string, audio: AudioMessage) => Promise<EncryptMessageView>;
+  sendEncryptLiveMsg: (userID: string, live: LiveMessage) => Promise<EncryptMessageView>;
+  sendEncryptVideoMsg: (userID: string, video: VideoMessage) => Promise<EncryptMessageView>;
+  sendEncryptLocationMsg: (userID: string, location: LocationMessage) => Promise<EncryptMessageView>;
+
+  getSessions: (userIDs: string[]) => Promise<Session[]>;
 }
