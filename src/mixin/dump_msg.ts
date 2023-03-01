@@ -2,7 +2,7 @@ import { Session } from '../types';
 import { v4 as uuid, parse as uuidParse } from 'uuid';
 import { scalarMult } from 'tweetnacl';
 import crypto from 'crypto';
-const { Point } = require('@noble/ed25519');
+import { Point } from '@noble/ed25519';
 
 export function privateKeyToCurve25519(privateKey: Buffer) {
   const h = crypto.createHash('sha512');
