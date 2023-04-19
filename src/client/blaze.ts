@@ -1,7 +1,7 @@
 import { Client } from '../client';
 import { KeystoreAuth } from '../mixin/keystore';
 import { signRequest } from '../mixin/sign';
-import { Keystore } from '../types';
+import { AcknowledgementRequest, Keystore } from '../types';
 import WebSocket from 'ws';
 import { BlazeMessage, MessageView } from '../types/blaze';
 import { gzip, ungzip } from 'pako';
@@ -32,6 +32,7 @@ export class BlazeClient extends Client {
     parse: false,
     syncAck: false,
   };
+  sendAcknowledgement!: (message: AcknowledgementRequest) => Promise<void>;
 
   constructor(keystore?: Keystore, option?: BlazeOptions) {
     super(keystore);
@@ -71,13 +72,7 @@ export class BlazeClient extends Client {
       else if (msg.category === 'SYSTEM_CONVERSATION' && this.h.onConversation) await this.h.onConversation(msg);
       else if (msg.category === 'SYSTEM_ACCOUNT_SNAPSHOT' && this.h.onTransfer) await this.h.onTransfer(msg);
       else await this.h.onMessage(msg);
-      if (this.options.syncAck) {
-        await this.send_raw({
-          id: this.newUUID(),
-          action: 'ACKNOWLEDGE_MESSAGE_RECEIPT',
-          params: { message_id: msg.message_id, status: 'READ' },
-        });
-      }
+      if (this.options.syncAck) await this.sendAcknowledgement({ message_id: msg.message_id!, status: 'READ' });
     };
     this.ws.onclose = () => {
       clearInterval(this.pingInterval);
