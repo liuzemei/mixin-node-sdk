@@ -49,7 +49,7 @@ export const request = (keystore?: Keystore, token = ''): AxiosInstance => {
         await delay();
         return ins(e.config);
       }
-      return e.response.data;
+      return Promise.reject(e);
     },
   );
   return ins;
