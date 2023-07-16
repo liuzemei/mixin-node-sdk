@@ -130,6 +130,7 @@ export class MessageClient implements MessageClientRequest {
     if (!category.startsWith('ENCRYPTED_')) return Promise.reject('category must start with ENCRYPTED_');
     if (typeof data === 'object') data = JSON.stringify(data);
     const sessions = await this.getSessionsWithCache([userID]);
+    if (sessions[userID].length === 0) return Promise.reject(`${userID} has no active session`);
     const data_base64 = encryptMessageData(Buffer.from(data), sessions[userID], Buffer.from(this.keystore.private_key, 'base64'));
     const checksum = generateUserCheckSum(sessions[userID] || []);
     const recipient_sessions = sessions[userID].map(v => ({ session_id: v.session_id }));
@@ -199,6 +200,7 @@ export class MessageClient implements MessageClientRequest {
       let { category, recipient_id, data, message_id, conversation_id } = msg;
       if (!category.startsWith('ENCRYPTED_')) throw new Error('category must start with ENCRYPTED_');
       let session = sessions[recipient_id!];
+      if (session.length === 0) continue;
       const data_base64 = encryptMessageData(Buffer.from(data!), session, Buffer.from(this.keystore.private_key, 'base64'));
       const checksum = generateUserCheckSum(session || []);
       const recipient_sessions = session.map(v => ({ session_id: v.session_id }));
@@ -206,6 +208,7 @@ export class MessageClient implements MessageClientRequest {
       if (!conversation_id) conversation_id = this.uniqueConversationID(this.keystore.client_id, recipient_id!);
       msgs.push({ category, recipient_id, conversation_id, message_id, data_base64, checksum, recipient_sessions });
     }
+    if (msgs.length === 0) return resp;
 
     const res = await this.sendEncryptMessagesRaw(msgs);
     let unsent: MessageRequest[] = [];
